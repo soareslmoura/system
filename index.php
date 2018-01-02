@@ -8,7 +8,11 @@ $app->config('debug', true);
 
 $app->get('/', function() {
     
-	echo "OK";
+	$sql = new Traders\DB\Sql();
+
+	$res = $sql->select("SELECT * FROM user");
+
+	echo json_encode($res);
 
 });
 

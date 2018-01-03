@@ -1,134 +1,70 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="col-lg-4">
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body yellow">
-                            <i class="fa fa-bar-chart-o fa-3x"></i>
-                            <h3>20,741 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Daily User Visits
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body blue">
-                            <i class="fa fa-pencil-square-o fa-3x"></i>
-                            <h3>2,060 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">Pending Orders Found
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body green">
-                            <i class="fa fa fa-floppy-o fa-3x"></i>
-                            <h3>20 GB</h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New Data Uploaded
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-primary text-center no-boder">
-                        <div class="panel-body red">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
-                            <h3>2,700 </h3>
-                        </div>
-                        <div class="panel-footer">
-                            <span class="panel-eyecandy-title">New User Registered
-                            </span>
-                        </div>
-                    </div>
-
-
-
-
-
-
-
-                </div>
-
-            </div>
-
-            <div class="row">
+<?php if(!class_exists('Rain\Tpl')){exit;}?></div>
+                <!-- /.col-lg-8 -->
                 <div class="col-lg-4">
-                    <!-- Notifications-->
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i>Notifications Panel
+                            <i class="fa fa-bell fa-fw"></i> Notifications Panel
                         </div>
-
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="list-group">
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i>New Comment
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
                                     <span class="pull-right text-muted small"><em>4 minutes ago</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i>3 New Followers
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
                                     <span class="pull-right text-muted small"><em>12 minutes ago</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i>Message Sent
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
                                     <span class="pull-right text-muted small"><em>27 minutes ago</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i>New Task
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
                                     <span class="pull-right text-muted small"><em>43 minutes ago</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-upload fa-fw"></i>Server Rebooted
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
                                     <span class="pull-right text-muted small"><em>11:32 AM</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i>Server Crashed!
+                                    <i class="fa fa-bolt fa-fw"></i> Server Crashed!
                                     <span class="pull-right text-muted small"><em>11:13 AM</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i>Server Not Responding
+                                    <i class="fa fa-warning fa-fw"></i> Server Not Responding
                                     <span class="pull-right text-muted small"><em>10:57 AM</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-shopping-cart fa-fw"></i>New Order Placed
+                                    <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
                                     <span class="pull-right text-muted small"><em>9:49 AM</em>
                                     </span>
                                 </a>
-
+                                <a href="#" class="list-group-item">
+                                    <i class="fa fa-money fa-fw"></i> Payment Received
+                                    <span class="pull-right text-muted small"><em>Yesterday</em>
+                                    </span>
+                                </a>
                             </div>
                             <!-- /.list-group -->
                             <a href="#" class="btn btn-default btn-block">View All Alerts</a>
                         </div>
-
+                        <!-- /.panel-body -->
                     </div>
-                    <!--End Notifications-->
-                </div>
-                <div class="col-lg-4">
-                    <!-- Donut Example-->
-                    <div class="panel panel-primary">
+                    <!-- /.panel -->
+                    
+                    <!-- /.panel -->
+                    <div class="chat-panel panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>Donut Chart Example
-                        </div>
-                        <div class="panel-body">
-                            <div id="morris-donut-chart"></div>
-                            <a href="#" class="btn btn-default btn-block">View Details</a>
-                        </div>
-
-                    </div>
-                    <!--End Donut Example-->
-                </div>
-                <div class="col-lg-4">
-                    <!-- Chat Panel Example-->
-                    <div class="chat-panel panel panel-primary">
-                        <div class="panel-heading">
-                            <i class="fa fa-comments fa-fw"></i>
-                            Chat
+                            <i class="fa fa-comments fa-fw"></i> Chat
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-chevron-down"></i>
@@ -136,34 +72,34 @@
                                 <ul class="dropdown-menu slidedown">
                                     <li>
                                         <a href="#">
-                                            <i class="fa fa-refresh fa-fw"></i>Refresh
+                                            <i class="fa fa-refresh fa-fw"></i> Refresh
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
-                                            <i class="fa fa-check-circle fa-fw"></i>Available
+                                            <i class="fa fa-check-circle fa-fw"></i> Available
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
-                                            <i class="fa fa-times fa-fw"></i>Busy
+                                            <i class="fa fa-times fa-fw"></i> Busy
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
-                                            <i class="fa fa-clock-o fa-fw"></i>Away
+                                            <i class="fa fa-clock-o fa-fw"></i> Away
                                         </a>
                                     </li>
                                     <li class="divider"></li>
                                     <li>
                                         <a href="#">
-                                            <i class="fa fa-sign-out fa-fw"></i>Sign Out
+                                            <i class="fa fa-sign-out fa-fw"></i> Sign Out
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="chat">
                                 <li class="left clearfix">
@@ -174,7 +110,7 @@
                                         <div class="header">
                                             <strong class="primary-font">Jack Sparrow</strong>
                                             <small class="pull-right text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>12 mins ago
+                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
                                             </small>
                                         </div>
                                         <p>
@@ -189,7 +125,7 @@
                                     <div class="chat-body clearfix">
                                         <div class="header">
                                             <small class=" text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>13 mins ago</small>
+                                                <i class="fa fa-clock-o fa-fw"></i> 13 mins ago</small>
                                             <strong class="pull-right primary-font">Bhaumik Patel</strong>
                                         </div>
                                         <p>
@@ -205,7 +141,7 @@
                                         <div class="header">
                                             <strong class="primary-font">Jack Sparrow</strong>
                                             <small class="pull-right text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>14 mins ago</small>
+                                                <i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
                                         </div>
                                         <p>
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
@@ -219,7 +155,7 @@
                                     <div class="chat-body clearfix">
                                         <div class="header">
                                             <small class=" text-muted">
-                                                <i class="fa fa-clock-o fa-fw"></i>15 mins ago</small>
+                                                <i class="fa fa-clock-o fa-fw"></i> 15 mins ago</small>
                                             <strong class="pull-right primary-font">Bhaumik Patel</strong>
                                         </div>
                                         <p>
@@ -229,7 +165,7 @@
                                 </li>
                             </ul>
                         </div>
-
+                        <!-- /.panel-body -->
                         <div class="panel-footer">
                             <div class="input-group">
                                 <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
@@ -240,33 +176,70 @@
                                 </span>
                             </div>
                         </div>
-
+                        <!-- /.panel-footer -->
                     </div>
-                    <!--End Chat Panel Example-->
+                    <!-- /.panel .chat-panel -->
                 </div>
+                <!-- /.col-lg-4 -->
             </div>
-
-
-         
-
-
+            <!-- /.row -->
         </div>
-        <!-- end page-wrapper -->
+        <!-- /#page-wrapper -->
 
     </div>
-    <!-- end wrapper -->
+    <!-- /#wrapper -->
 
-    <!-- Core Scripts - Include with every page -->
-    <script src="/sys/plugins/jquery-1.10.2.js"></script>
-    <script src="/sys/plugins/bootstrap/bootstrap.min.js"></script>
-    <script src="/sys/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/sys/plugins/pace/pace.js"></script>
-    <script src="/sys/scripts/siminta.js"></script>
-    <!-- Page-Level Plugin Scripts-->
-    <script src="/sys/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="/sys/plugins/morris/morris.js"></script>
-    <script src="/sys/scripts/dashboard-demo.js"></script>
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../vendor/raphael/raphael.min.js"></script>
+   
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/scripts.js"></script>
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+    <script>
+var ctx = document.getElementById("Chart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',    
+    data: {
+        labels: ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"],
+        datasets: [{
+            label: 'Total P/L',
+            data: [125, 132, 78, 18, 26, 140, 125, 139, 98, 56, 79, 174],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.0)',          
+               
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)'
+                
+            ],
+            borderWidth: 2,
+            tension: 0.06
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+
+                }
+            }]
+        }
+
+    }
+    
+});
+</script>
 
 </body>
-
-</html>

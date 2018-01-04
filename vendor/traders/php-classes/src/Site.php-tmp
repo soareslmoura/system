@@ -1,0 +1,15 @@
+<?php
+
+namespace Traders;
+
+class Site extends Page {
+
+	public function __construct($opts = array(), $tpl_dir = "/views/site/") {
+
+		parent::__construct($opts, $tpl_dir);
+
+	}
+
+}
+
+?>

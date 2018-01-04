@@ -1,0 +1,136 @@
+
+
+/* ==========================  LAYOUT  ========================/*
+
+/* ================  BODY  ===================*/
+
+body, html, .slide{
+	height: 100%;
+}
+
+body{		
+	background: url('../images/sysImages/fundo.jpg');
+	background-attachment: fixed;
+	font-family: Helvetica,Arial,sans-serif;
+	
+}
+
+
+
+
+/* === BARRA DE NAVEGAÇAO =====*/
+
+.img-logo{
+	height: 45px;
+	width: 180px;
+	display:block;
+	background: url('../images/sysImages/sysTraders2.svg') no-repeat;
+	background-size: contain;
+	color: transparent;
+	
+}
+
+nav.navbar-personalizada{
+	border:none;
+	padding: 10px 0px;
+
+	
+}
+
+.navbar-brand{
+	padding-top: 5px;
+}
+
+.divisor{
+	width: 1px;
+	height: 16px;
+	background: #999999;
+	margin:15px 10px;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #F7931D;
+	font-size: 14px;
+	/* background: #7c7c7c;*/
+	font-family:  helvetica,arial, sans-serif;
+	font-weight: bolder;
+
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+	color: #7c7c7c;
+	/*background: #F7931D;*/
+	font-size: 14px;
+	font-weight: bolder;
+}
+
+.slide{	
+	padding-top: 35px;
+	width: 100%;
+}
+
+
+/*==========  Botão  ================*/
+
+.btn-custom{
+	color: white;
+	border-radius: 500px;
+	-webkit-border-radius: 500px;
+	-moz-border-radius: 500px;
+	padding: 10px 60px;	
+	transition: background 0.4s, color 0.4s, border 0.4s;
+}
+
+#nomeUser{
+	margin-bottom: 5px;
+}
+
+#formDemo h3{
+	
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 20px; 
+}
+
+
+
+
+/*========= SECTIONS ===========*/
+
+#cadastro-demo{
+	background: white;
+	
+	height: 100%;
+
+}
+
+footer{
+	background: #404041;
+	padding: 50px 0px 20px 0px;
+	position: relative;
+}
+
+/* ========================= TIPOGRAFIA ======================*/
+
+.font-slideshow{
+	font-size: 40px;
+	font-weight: 700;
+	letter-spacing: -1px;
+	margin-bottom: 5px;
+}
+
+.font-demo-heading{
+	font-size: 40px;	
+	font-weight: 700;
+	letter-spacing: -1px;
+	margin-bottom: 5px;
+}
+
+.nossos-planos{
+	font-size: 40px;
+}
+
+.sobreSystraders{
+	font-size: 50px;
+	padding-left: 360px;
+	color: #F7931D;
+}

@@ -1,0 +1,23 @@
+
+
+/* ==========================  LAYOUT  ========================/*
+
+           body{
+               padding: 40px 0px 0px 20px;
+           }
+           
+           .img-logo{
+                height: 150px;
+                width: 550px;
+                display:block;                
+                background-size: contain;
+                color: transparent;
+           }
+           
+            .img-22traders{
+                height: 40px;
+                width: 160px;
+                display:block;                
+                background-size: contain;
+                color: transparent;
+           }

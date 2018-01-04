@@ -1,0 +1,244 @@
+
+
+/* ==========================  LAYOUT  ========================/*
+
+/* ================  BODY  ===================*/
+
+body, html, .slide{
+	height: 100%;
+}
+
+body{		
+	background: url('../../res/images/sysImages/fundo.jpg');
+	background-attachment: fixed;
+	font-family: Helvetica,Arial,sans-serif;
+	
+}
+
+#mensagem{
+
+	display:none;
+	margin-top: 10px;	
+}
+
+
+
+
+/* === BARRA DE NAVEGAÇAO =====*/
+
+.img-logo{
+	height: 45px;
+	width: 180px;
+	display:block;
+	background: url('../../res/images/sysImages/sysTraders2.svg') no-repeat;
+	background-size: contain;
+	color: transparent;
+	
+}
+
+nav.navbar-personalizada{
+	border:none;
+	padding: 10px 0px;
+
+	
+}
+
+.navbar-brand{
+	padding-top: 5px;
+}
+
+.divisor{
+	width: 1px;
+	height: 16px;
+	background: #999999;
+	margin:15px 10px;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #F7931D;
+	font-size: 14px;
+	/* background: #7c7c7c;*/
+	font-family:  helvetica,arial, sans-serif;
+	font-weight: bolder;
+
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+	color: #7c7c7c;
+	/*background: #F7931D;*/
+	font-size: 14px;
+	font-weight: bolder;
+}
+
+.slide{	
+	padding-top: 35px;
+	width: 100%;
+}
+
+
+/*==========  Botão  ================*/
+
+.btn-custom{
+	color: white;
+	border-radius: 500px;
+	-webkit-border-radius: 500px;
+	-moz-border-radius: 500px;
+	padding: 10px 60px;	
+	transition: background 0.4s, color 0.4s, border 0.4s;
+}
+
+.btn-conheca-plano{
+	background: #F7931D;
+	color: #404041;
+	font-size: 15px;
+	font-weight: 800;
+	border: 4px solid #8C8C8C;
+	margin-bottom: 20px;
+	margin-top: 10px;
+	text-transform: uppercase;
+}
+.btn-conheca-plano:hover{
+	background: #404041;
+	color: white;
+	font-size: 15px;
+	font-weight: 800;
+	border: 4px solid #F7931D;
+	margin-bottom: 20px;
+	margin-top: 10px;
+	text-transform: uppercase;
+}
+
+/*  ======= PANELS PLANOS =============*/
+#panel-demo{
+	background: #e5e4e2;
+	font-size: 30px;
+    
+}
+
+#panel-basic{
+	background: #8C8C8C;
+	font-size: 40px;
+}
+
+#panel-premium{
+	background: #000000;
+	font-size: 40px;
+}
+
+#botao-assinar-demo{
+	background: #bcbcbc;
+	color: black;
+	padding: 10px 128px;
+}
+
+#botao-assinar-demo:hover{
+	background: #9e9e9e;
+	
+}
+
+#botao-assinar{
+	background: #448e28;
+	color: white;
+	padding: 10px 128px;
+}
+
+#botao-assinar:hover{
+	background: #2c6019;
+	color: white;
+}
+
+
+
+/*========= SECTIONS ===========*/
+
+#planos{
+	background: white;
+	padding-top: 5px;
+	padding-bottom: 20px;
+}
+
+#sobre{
+	background: url('../../res/images/sysImages/candles.jpg') no-repeat;
+	padding-top: 5px;
+	padding-bottom: 20px;
+	color: white;
+	font-weight: 500;
+	
+}
+
+p{
+	font-size: 16px;
+	padding: 5px 10px;
+	text-align: justify;
+}
+
+.div_depoimentos{
+	background: white;	
+	height: 300px;
+	padding-top: 10px;
+	
+}
+
+#rodape{
+background: #8C8C8C;
+width: 100%;
+height: 300px;
+
+}
+
+.form-entrar{
+	width: 350px;
+	padding: 5px;
+
+}
+
+footer{
+	background: #404041;
+	padding: 50px 0px 20px 0px;
+	position: relative;
+}
+#formDemo{
+    display: block;
+}
+
+.cadastraUser{    
+    background: white;
+    
+}
+
+/* ============== GERAL =================================*/
+
+.centralizar_table{
+	margin=0 auto;
+	float= none;
+	background=red;
+}
+
+
+
+
+/* ========================= TIPOGRAFIA ======================*/
+
+.font-slideshow{
+	font-size: 40px;
+	font-weight: 700;
+	letter-spacing: -1px;
+	margin-bottom: 5px;
+}
+
+.font-demo-heading{
+	font-size: 40px;	
+	font-weight: 700;
+	letter-spacing: -1px;
+	margin-bottom: 5px;
+}
+
+.nossos-planos{
+	font-size: 40px;
+}
+
+.sobreSystraders{
+	font-size: 50px;
+	padding-left: 360px;
+	color: #F7931D;
+}

@@ -5,6 +5,8 @@ require_once("vendor/autoload.php");
 use \Slim\Slim;
 use \Traders\Page;
 use \Traders\PageAdmin;
+use \Traders\System;
+use \Traders\Model\User;
 
 
 $app = new Slim();
@@ -22,6 +24,33 @@ $app->get('/master', function() {
     
 	$page = new PageAdmin();
 	$page->setTpl("index");
+
+});
+
+$app->get('/system', function() {
+    
+	$page = new System();
+	$page->setTpl("index");
+
+});
+
+$app->get('/master/login', function() {
+    
+	$page = new PageAdmin([
+		"header" => false,
+		"footer" => false
+	]);
+
+	$page->setTpl("login");
+
+});
+
+$app->post('/master/login', function() {
+    
+	User::login($_POST['login'], $_POST['password']);
+
+	header("location:/master");
+	exit;
 
 });
 

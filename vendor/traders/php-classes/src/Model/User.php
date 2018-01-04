@@ -1,8 +1,8 @@
 <?php
-namespace Hcode\Model;
+namespace Traders\Model;
 
-use \Hcode\DB\Sql;
-use \Hcode\Model;
+use \Traders\DB\Sql;
+use \Traders\Model;
 
 class User extends Model{
 
@@ -12,27 +12,29 @@ class User extends Model{
 
 		$sql = new Sql();
 
-		$result = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(":LOGIN"=>$login));
-
-		if (count($result)===0) {
-			throw new \Exception("Usuário inexistente ou senha inválida");			
+		$result = $sql->select("SELECT * FROM st_user WHERE email_User = :LOGIN", array(":LOGIN"=>$login));
+		
+		if (!$result) {
+			throw new \Exception("Usuário inexistente ou senha inválida");// Contra-barra no exception pq o exception está fora do namespace Traders			
 		}
 
-		$data = $result[0];
-
-		if(password_verify($password, $data["despassword"])===true){
+		$data_user = $result[0];
+		
+		if(password_verify($password, $data_user["password_User"]))
+		{
 
 			$user = new User();
-
-			$user->setData($data);
+			$user->setiduser($data_user['id_User']);
+/*			exit;
+			$user->setData($data_user);
 
 			$_SESSION[User::SESSION] = $user->getData();
 
-			return $user;
+			return $user;*/
 
 		}else{
 
-			throw new \Exception("Usuário inexistente ou senha inválida");
+			throw new \Exception("Usuário inexistente ou senha inválida senha");
 		}
 	}
 

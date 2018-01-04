@@ -18,11 +18,7 @@ class Model{
 		$method = substr($name_method, 0, 3);
 
 		$fieldName = substr($name_method, 3, strlen($name_method));
-
-		var_dump($method, $fieldName);
-		exit;
-
-		/*
+		
 		switch ($method)
 		{
 			case "get":
@@ -33,7 +29,7 @@ class Model{
 				$this->values[$fieldName] = $args[0];
 			break;		
 
-		}*/
+		}
 	}
 
 

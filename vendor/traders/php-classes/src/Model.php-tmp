@@ -18,21 +18,16 @@ class Model {
 
 		$fieldName = substr($name_method, 3, strlen($name_method));
 
-		var_dump($method, $fieldName);
-		exit;
+		switch ($method) {
+			case "get":
+				return $this->values[$fieldName];
+				break;
 
-		/*
-	switch ($method)
-	{
-	case "get":
-	return $this->values[$fieldName];
-	break;
+			case "set":
+				$this->values[$fieldName] = $args[0];
+				break;
 
-	case "set":
-	$this->values[$fieldName] = $args[0];
-	break;
-
-	}*/
+		}
 	}
 
 	public function setData($data = array()) {

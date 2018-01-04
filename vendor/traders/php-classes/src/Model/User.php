@@ -24,13 +24,11 @@ class User extends Model{
 		{
 
 			$user = new User();
-			$user->setiduser($data_user['id_User']);
-/*			exit;
-			$user->setData($data_user);
-
+			$user->setData($data_user);	
+		
 			$_SESSION[User::SESSION] = $user->getData();
 
-			return $user;*/
+			return $user;
 
 		}else{
 
@@ -43,12 +41,11 @@ class User extends Model{
 		if(
 			!isset($_SESSION[User::SESSION]) 
 			||			
-			!(int)$_SESSION[User::SESSION]["iduser"]>0 
+			!(int)$_SESSION[User::SESSION]["id_User"]>0 
 			|| 
-			(bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin )
+			(int)$_SESSION[User::SESSION]["userLevel_id_User_Level"] < 4 )
 		{
-			header("Location: /ecommerce/admin/login");
-			
+			header("Location: /master/login");			
 			exit;
 
 		}

@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once ("vendor/autoload.php");
 
@@ -20,14 +21,16 @@ function () {
 
 	});
 
-$app->get('/master', function () {
+$app->get('/master', function () {// LOGIN NO SITE ADMINSTRATIVO
+
+		User::verifyLogin();
 
 		$page = new PageAdmin();
 		$page->setTpl("index");
 
 	});
 
-$app->get('/system', function () {
+$app->get('/system', function () {// PAGINA DO SISTEMA
 
 		$page = new System();
 		$page->setTpl("index");
@@ -42,6 +45,14 @@ $app->get('/master/login', function () {
 			]);
 
 		$page->setTpl("login");
+
+	});
+
+$app->get('/master/logout', function () {
+
+		User::logout();
+		header("location:/master");
+		exit;
 
 	});
 

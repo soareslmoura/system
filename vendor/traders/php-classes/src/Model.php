@@ -44,7 +44,7 @@ class Model{
 
 	}
 
-	public function getData()
+	public function getData()//getValues
 	{
 		return $this->values;
 	}

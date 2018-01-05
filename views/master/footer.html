@@ -5,7 +5,7 @@
       Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2017 <a href="#">SysTrader</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
@@ -95,6 +95,18 @@
 <script src="/res/master/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/res/master/dist/js/adminlte.min.js"></script>
+<!-- MASKED INPUT PLUGIN -->
+<script src="/js/maskedinput.js"></script>
+
+<script>
+  
+  jQuery(function($){  
+   $("#user_cel").mask("(99) 99999-9999");
+   $("#user_cep").mask("99.999-999");
+  
+});
+
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

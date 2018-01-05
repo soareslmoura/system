@@ -15,7 +15,7 @@ class Sql {
 	{
 
 		$this->conn = new \PDO(
-			"mysql:dbname=".Sql::DBNAME.";host=".Sql::HOSTNAME, 
+			"mysql:dbname=".Sql::DBNAME.";charset=utf8;host=".Sql::HOSTNAME,
 			Sql::USERNAME,
 			Sql::PASSWORD
 		);

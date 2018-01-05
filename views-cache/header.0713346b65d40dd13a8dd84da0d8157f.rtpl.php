@@ -3,7 +3,7 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -256,13 +256,13 @@ desired effect
         <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
         <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>Usuários</span>
+          <a href="#"><i class="fa fa-user"></i> <span>Usuários</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Lista de Usuários</a></li>
+            <li><a href="/master/users">Lista de Usuários</a></li>
             <li><a href="#">Tarefas</a></li>
             <li><a href="#">Mensagens</a></li>
             <li><a href="#">Cupom de Desconto</a></li>

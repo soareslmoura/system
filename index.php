@@ -104,6 +104,14 @@ $app->get('/master/users/create', function() {
 $app->get('/master/users/:id/del', function($id) {
 
 	User::verifyLogin();
+
+	$user = new User();
+	$user->getUser((int)$id);
+	$user->deleteUser();
+
+	header("location: /master/users");
+	exit;
+
    
 });
 
@@ -111,13 +119,14 @@ $app->get('/master/users/:id', function($id) {
 
 	User::verifyLogin();
 	$ufs = User::listUfs();
-
+	var_dump($_SESSION["User"]["id_User"]);
 	$user = new User();
 	$dado = $user->getUser((int)$id);
     
 	$page = new PageAdmin();
 	$page->setTpl("users-update", array(
-			"user"=>$user->getData()
+			"user"=>$user->getData(),
+			"ufs"=>$ufs
 	));
 
 });
@@ -138,10 +147,47 @@ $app->post('/master/users/create', function() {
 	    
 });
 
-$app->post('/master/users/:id', function($id) {
+$app->post('/master/users/:id', function($id) {// Update de usuarios pelo ADM
 
 	User::verifyLogin();
+
+	$user= new User();
+
+	$user->getUser((int)$id);
+	$user->setData($_POST);
+	$user->updateUser();
+	header("location: /master/users");
+	exit;
    
+});
+
+$app->get('/cdemo', function() {// Página de cdastramento conta demo pelo usuário
+    
+	$page = new Page();
+	$page->setTpl("cdemo");
+
+});
+
+$app->post('/cdemo', function() {// Cadastro de conta demo pelo usuário comum 	
+
+	$user = new User();
+
+	$user->setData($_POST);
+
+	$msg = $user->createUserExternal();
+	var_dump($msg);
+	//header("location: /cdemo");
+	exit;	    
+});
+
+//-----------  CUPONS -------------------
+
+$app->get('/master/cupom', function() {// Página de cdastramento conta demo pelo usuário
+    User::verifyLogin();
+    
+	$page = new PageAdmin();
+	$page->setTpl("/master/cupom");
+
 });
 
 

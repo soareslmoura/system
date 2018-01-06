@@ -143,6 +143,26 @@ $app->post('/master/users/:id', function ($id) {
 
 	});
 
+$app->get('/cdemo', function () {// Página de cdastramento conta demo pelo usuário
+
+		$page = new Page();
+		$page->setTpl("cdemo");
+
+	});
+
+$app->post('/cdemo', function () {// Cadastro de conta demo pelo usuário comum
+
+		$user = new User();
+
+		$user->setData($_POST);
+
+		$user->createUser();
+
+		header("location: /master/users");
+		exit;
+
+	});
+
 $app->run();
 
 ?>

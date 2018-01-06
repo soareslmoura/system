@@ -12,5 +12,18 @@
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  		<!-- MASKED INPUT PLUGIN -->
+		<script src="/js/maskedinput.js"></script>
+
+  		<script>
+  
+		   jQuery(function($){  
+
+			   $("#cel").mask("(99) 99999-9999");
+			   
+		  
+			});
+
+		</script>
 	</body>
 </html>

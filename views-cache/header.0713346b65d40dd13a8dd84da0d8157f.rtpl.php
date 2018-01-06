@@ -265,7 +265,7 @@ desired effect
             <li><a href="/master/users">Lista de Usuários</a></li>
             <li><a href="#">Tarefas</a></li>
             <li><a href="#">Mensagens</a></li>
-            <li><a href="#">Cupom de Desconto</a></li>
+            <li><a href="/master/cupom">Cupom de Desconto</a></li>
           </ul>
         </li>
       </ul>

@@ -6,7 +6,7 @@ use \Traders\Model;
 
 class Conta extends Model {
 
-	public function calcularDuracao($duracao) {
+	public function calcularDuracao($duracao/* Dias de gratuidade*/) {
 
 		date_default_timezone_set("UTC");
 		$horaatual = $_SERVER['REQUEST_TIME'];

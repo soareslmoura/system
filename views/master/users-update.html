@@ -18,7 +18,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/master/users/" method="post">
+        <form role="form" action="/master/users/{$user.id_User}" method="post">
           <div class="box-body">
             <div class="form-group">
               <label for="user_name">Nome</label>
@@ -51,9 +51,9 @@
             <div class="form-group">
               <label for="user_uf">Estado</label>
               <select class="form-control" id="user_uf" name="user_uf">
-                  <option value="">{$user.address_estado}</option>
+                  <option value="{$user.address_estado}">{$user.address_estado}</option>
                 {loop="$ufs"}
-                  <option value="">{$value.nome_uf}</option>
+                  <option value="{$value.uf}">{$value.nome_uf}</option>
                 {/loop}  
               </select>             
             </div>
@@ -61,19 +61,11 @@
               <label for="user_cep">CEP</label>
               <input type="text" class="form-control" id="user_cep" name="user_cep" placeholder="Digite o CEP" value="{$user.address_cep}">
             </div>          
-            <div class="form-group">
-              <label for="user_tipoconta">Tipo da Conta</label>
-                <select class="form-control" id="user_tipoconta" name="user_tipoconta">
-                    <option value="">{$user.tipoConta_id_tipo_Conta}</option>
-                  {loop="$tipoconta"}
-                    <option value="">{$value.tipo_conta}</option>
-                  {/loop}  
-                </select>             
-             </div>          
+                  
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
           </div>
         </form>
       </div>

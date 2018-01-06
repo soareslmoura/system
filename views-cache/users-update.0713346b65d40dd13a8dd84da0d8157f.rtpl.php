@@ -18,7 +18,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/master/users/" method="post">
+        <form role="form" action="/master/users/<?php echo htmlspecialchars( $user["id_User"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" method="post">
           <div class="box-body">
             <div class="form-group">
               <label for="user_name">Nome</label>
@@ -51,9 +51,9 @@
             <div class="form-group">
               <label for="user_uf">Estado</label>
               <select class="form-control" id="user_uf" name="user_uf">
-                  <option value=""><?php echo htmlspecialchars( $user["address_estado"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                  <option value="<?php echo htmlspecialchars( $user["address_estado"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $user["address_estado"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
                 <?php $counter1=-1;  if( isset($ufs) && ( is_array($ufs) || $ufs instanceof Traversable ) && sizeof($ufs) ) foreach( $ufs as $key1 => $value1 ){ $counter1++; ?>
-                  <option value=""><?php echo htmlspecialchars( $value1["nome_uf"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                  <option value="<?php echo htmlspecialchars( $value1["uf"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nome_uf"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
                 <?php } ?>  
               </select>             
             </div>
@@ -61,19 +61,11 @@
               <label for="user_cep">CEP</label>
               <input type="text" class="form-control" id="user_cep" name="user_cep" placeholder="Digite o CEP" value="<?php echo htmlspecialchars( $user["address_cep"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
             </div>          
-            <div class="form-group">
-              <label for="user_tipoconta">Tipo da Conta</label>
-                <select class="form-control" id="user_tipoconta" name="user_tipoconta">
-                    <option value=""><?php echo htmlspecialchars( $user["tipoConta_id_tipo_Conta"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
-                  <?php $counter1=-1;  if( isset($tipoconta) && ( is_array($tipoconta) || $tipoconta instanceof Traversable ) && sizeof($tipoconta) ) foreach( $tipoconta as $key1 => $value1 ){ $counter1++; ?>
-                    <option value=""><?php echo htmlspecialchars( $value1["tipo_conta"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
-                  <?php } ?>  
-                </select>             
-             </div>          
+                  
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
           </div>
         </form>
       </div>

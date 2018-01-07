@@ -4,10 +4,10 @@ session_start();
 require_once ("vendor/autoload.php");
 
 use \Slim\Slim;
+use \Traders\Model\System;
 use \Traders\Model\User;
 use \Traders\Page;
 use \Traders\PageAdmin;
-use \Traders\System;
 
 $app = new Slim();
 
@@ -105,19 +105,27 @@ $app->get('/master/users/:id/del', function ($id) {
 
 		User::verifyLogin();
 
+		$user = new User();
+		$user->getUser((int) $id);
+		$user->deleteUser();
+
+		header("location: /master/users");
+		exit;
+
 	});
 
 $app->get('/master/users/:id', function ($id) {
 
 		User::verifyLogin();
 		$ufs = User::listUfs();
-
+		var_dump($_SESSION["User"]["id_User"]);
 		$user = new User();
 		$dado = $user->getUser((int) $id);
 
 		$page = new PageAdmin();
 		$page->setTpl("users-update", array(
-				"user" => $user->getData()
+				"user" => $user->getData(),
+				"ufs"  => $ufs
 			));
 
 	});
@@ -137,9 +145,17 @@ $app->post('/master/users/create', function () {
 
 	});
 
-$app->post('/master/users/:id', function ($id) {
+$app->post('/master/users/:id', function ($id) {// Update de usuarios pelo ADM
 
 		User::verifyLogin();
+
+		$user = new User();
+
+		$user->getUser((int) $id);
+		$user->setData($_POST);
+		$user->updateUser();
+		header("location: /master/users");
+		exit;
 
 	});
 
@@ -156,12 +172,77 @@ $app->post('/cdemo', function () {// Cadastro de conta demo pelo usuário comum
 
 		$user->setData($_POST);
 
-		$user->createUser();
+		$msg = $user->createUserExternal();
+		var_dump($msg);
+		//header("location: /cdemo");
+		exit;
+	});
 
-		header("location: /master/users");
+//-----------  CUPONS -------------------
+
+$app->get('/master/cupom', function () {// Página lista de cupons criados
+		User::verifyLogin();
+
+		$cupons = System::listCupons();
+
+		$page = new PageAdmin();
+		$page->setTpl("cupons", array(
+				"cupons" => $cupons
+			));
+		$page->setTpl("cupom");
+
+	});
+
+$app->get('/master/cupom/create-personal', function () {// Página de castramento de novo cupom individual GET
+
+		User::verifyLogin();
+
+		$page = new PageAdmin();
+		$page->setTpl("cupom-create-personal");
+
+	});
+
+$app->get('/master/cupom/create-multi', function () {// Página de cdastramento de novo cupom multiplo
+
+		User::verifyLogin();
+
+		$page = new PageAdmin();
+		$page->setTpl("cupom-create-multi");
+
+	});
+
+$app->post('/master/cupom/create-personal', function () {// Página de castramento de novo cupom individual POST
+
+		User::verifyLogin();
+
+		$sys = new System();
+
+		$sys->setData($_POST);
+
+		$sys = $sys->createCupom();
+
+		//header("location: /master/cupom");
 		exit;
 
 	});
+/*
+$app->post('/master/cupom/create-multi', function() {// Página de castramento de novo cupom multiplo POST
+
+User::verifyLogin();
+
+$user = new User();
+$sys = new System();
+
+$user->setData($_POST);
+
+//    $msg = $sys->createCupom($user->gettipocupom(), $user->getcategoriacupom());
+
+var_dump($user);
+exit;
+
+});
+
+ */
 
 $app->run();
 

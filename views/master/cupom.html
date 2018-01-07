@@ -15,14 +15,15 @@
       <div class="box box-primary">
             
             <div class="box-header">
-              <a href="/master/users/create" class="btn btn-success">Cadastrar Novo Cupom</a>
+              <a href="/master/cupom/create-personal" class="btn btn-success">Novo Cupom Individual</a>
+              <a href="/master/cupom/create-multi" class="btn btn-success">Novo Cupom em Lote</a>
             </div>
 
             <div class="box-body no-padding">
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th width="150px" style=" text-align: center;">Cupom</th>
+                    <th width="130px" style=" text-align: center;">Cupom</th>
                     <th width="100px" style=" text-align: center;">Tipo</th>
                     <th width="40px"  style=" text-align: center;">Desconto</th>
                     <th width="115px" style=" text-align: center;">Período</th>

@@ -6,7 +6,7 @@ require_once("vendor/autoload.php");
 use \Slim\Slim;
 use \Traders\Page;
 use \Traders\PageAdmin;
-use \Traders\System;
+use \Traders\Model\System;
 use \Traders\Model\User;
 
 
@@ -182,15 +182,70 @@ $app->post('/cdemo', function() {// Cadastro de conta demo pelo usuário comum
 
 //-----------  CUPONS -------------------
 
-$app->get('/master/cupom', function() {// Página de cdastramento conta demo pelo usuário
+$app->get('/master/cupom', function() {// Página lista de cupons criados
     User::verifyLogin();
-    
+
+	$cupons = System::listCupons();
+	
 	$page = new PageAdmin();
-	$page->setTpl("/master/cupom");
+	$page->setTpl("cupons", array(
+		"cupons"=>$cupons
+		));
+	$page->setTpl("cupom");
 
 });
 
+$app->get('/master/cupom/create-personal', function() {// Página de castramento de novo cupom individual GET
+   
+    User::verifyLogin();
 
+	$page = new PageAdmin();
+	$page->setTpl("cupom-create-personal");
+
+});
+
+$app->get('/master/cupom/create-multi', function() {// Página de cdastramento de novo cupom multiplo
+   
+    User::verifyLogin();
+
+	$page = new PageAdmin();
+	$page->setTpl("cupom-create-multi");
+
+});
+
+$app->post('/master/cupom/create-personal', function() {// Página de castramento de novo cupom individual POST
+   
+    User::verifyLogin();
+
+   
+    $sys = new System();
+
+    $sys->setData($_POST);
+
+    $sys = $sys->createCupom();
+	
+	//header("location: /master/cupom");
+	exit;
+
+});
+/*
+$app->post('/master/cupom/create-multi', function() {// Página de castramento de novo cupom multiplo POST
+   
+    User::verifyLogin();
+
+    $user = new User();
+    $sys = new System();
+
+    $user->setData($_POST);
+
+//    $msg = $sys->createCupom($user->gettipocupom(), $user->getcategoriacupom());
+
+	var_dump($user);
+	exit;
+
+});
+
+*/
 
 
 $app->run();

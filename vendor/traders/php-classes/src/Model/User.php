@@ -1,4 +1,5 @@
 <?php
+
 namespace Traders\Model;
 
 use \Traders\DB\Sql;

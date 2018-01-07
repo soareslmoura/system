@@ -26,12 +26,12 @@
               <table class="table table-striped ">
                 <thead>
                   <tr>
-                    <th width="170px" style=" text-align: center;">Nome</th>
-                    <th width="100px" style=" text-align: center;">E-mail</th>
-                    <th width="40px"  style=" text-align: center;">Conta</th>
-                    <th width="115px" style=" text-align: center;">celular</th>
-                    <th width="110px" style=" text-align: center;">Data Cadastro</th>
-                    <th width="110px" style=" text-align: center;">Validade Conta</th>
+                    <th width="170px">Nome</th>
+                    <th width="100px">E-mail</th>
+                    <th width="40px">Conta</th>
+                    <th width="115px">celular</th>
+                    <th width="110px">Data Cadastro</th>
+                    <th width="110px">Validade Conta</th>
                     <th style="width: 250px; text-align: center;">Admin</th>
                     
                   </tr>

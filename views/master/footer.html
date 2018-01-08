@@ -62,7 +62,7 @@
 
   $(function() {
     $( "#validadegeral" ).datepicker({
-    	dateFormat: 'dd-mm-yy',
+    	dateFormat: 'dd/mm/yy',
     	showOtherMonths: true,
         selectOtherMonths: false,
         dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
@@ -75,7 +75,7 @@
 
   $(function() {
     $( "#validadeindividual" ).datepicker({
-    	dateFormat: 'dd-mm-yy',
+    	dateFormat: 'dd/mm/yy ',
     	showOtherMonths: true,
         selectOtherMonths: false,
         dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],

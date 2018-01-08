@@ -109,7 +109,7 @@
         
               <div class="form-group">
                       <label for="user_justify_individual">Justificativa</label>
-                      <textarea  maxlength="280" style="resize: none" class="form-control" rows="3" id="user_justify_individual" name="user_justify" placeholder="Explique brevemente o motivo da criação do Cupom."></textarea>
+                      <textarea  maxlength="280" style="resize: none" class="form-control" rows="3" id="user_justify_individual" name="user_justify" placeholder="Explique brevemente o motivo da criação do Cupom." required=""></textarea>
                     </div>
             <div class="box-footer">
               <button type="submit" class="btn btn-success">Gerar Cupom</button>

@@ -8,6 +8,7 @@ use \Traders\Page;
 use \Traders\PageAdmin;
 use \Traders\Model\System;
 use \Traders\Model\User;
+use \Traders\DB\Sql;
 
 
 $app = new Slim();
@@ -119,7 +120,7 @@ $app->get('/master/users/:id', function($id) {
 
 	User::verifyLogin();
 	$ufs = User::listUfs();
-	var_dump($_SESSION["User"]["id_User"]);
+
 	$user = new User();
 	$dado = $user->getUser((int)$id);
     
@@ -186,12 +187,15 @@ $app->get('/master/cupom', function() {// Página lista de cupons criados
     User::verifyLogin();
 
 	$cupons = System::listCupons();
+
+	$user = new User();
+	$user->getUser((int)$_SESSION["User"]["id_User"]);	
 	
 	$page = new PageAdmin();
-	$page->setTpl("cupons", array(
-		"cupons"=>$cupons
-		));
-	$page->setTpl("cupom");
+	$page->setTpl("cupom", array(			
+			"cupons"=>$cupons,
+			"adm"=>$user->getData()
+	));
 
 });
 
@@ -213,6 +217,28 @@ $app->get('/master/cupom/create-multi', function() {// Página de cdastramento d
 
 });
 
+$app->get('/master/cupom/:id', function($id) {// Página de detalhes do cupom criado
+
+	User::verifyLogin();
+	
+	$sys = new System();
+	$sys->getCupom((int)$id);	
+
+	$user = new User();
+	$user->getUser((int)$_SESSION["User"]["id_User"]);
+
+	date_default_timezone_set("UTC");
+	$date = date('Y-m-d H:i:s');
+	
+	$page = new PageAdmin();
+	$page->setTpl("cupom-detail", array(
+								"cupom"=>$sys->getData(),
+								"adm"=>$user->getData(),
+								"date"=>$date
+								));
+
+});
+
 $app->post('/master/cupom/create-personal', function() {// Página de castramento de novo cupom individual POST
    
     User::verifyLogin();
@@ -222,30 +248,31 @@ $app->post('/master/cupom/create-personal', function() {// Página de castrament
 
     $sys->setData($_POST);
 
-    $sys = $sys->createCupom();
+    $msg = $sys->createCupom();
+   // var_dump($msg);
 	
-	//header("location: /master/cupom");
+	header("location: /master/cupom");
 	exit;
 
 });
-/*
+
 $app->post('/master/cupom/create-multi', function() {// Página de castramento de novo cupom multiplo POST
    
     User::verifyLogin();
 
-    $user = new User();
     $sys = new System();
 
-    $user->setData($_POST);
+    $sys->setData($_POST);
 
-//    $msg = $sys->createCupom($user->gettipocupom(), $user->getcategoriacupom());
+    $msg = $sys->createCupom();
 
-	var_dump($user);
+    header("location: /master/cupom");
+	//var_dump($msg);
 	exit;
 
 });
 
-*/
+
 
 
 $app->run();

@@ -1,0 +1,99 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Criar novo Cupom
+  </h1>
+  
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">Novo Cupom</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form-group" role="form" action="/master/cupom/create-multi" method="post">
+          
+          
+                  <h3>Detalhes do Cupom</h3>       
+               
+                  <div class="box-body">
+                    <div class="form-group">
+                      {if="$cupom.used_Cupom == false"} 
+                      <div class="panel panel-success">
+                        {else}
+                      <div class="panel panel-warning">
+                        {/if}
+                        <div class="panel-heading">TIPO DE CUPOM: {if="$cupom.tipo_Cupom == 'multiplo'"}
+                        Múltiplo {else} Individual {/if} &nbsp;&nbsp;&nbsp;&nbsp; NRº: {$cupom.cod_Cupom} </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered" style="width: 500px">
+                              <tbody>
+                                <tr>
+                                  <th>Categoria:</th>
+                                  <th>{if="$cupom.categoria_Cupom == 'D'"}Desconto {else} Gratuidade em Demo {/if}</th> 
+                                </tr>                                                           
+                                <tr>                 
+                                  <th>Validade do Cupom:</td>
+                                  <th>{$cupom.validade_Cupom} {if="$date < $cupom.validade_Cupom "} {else} <span class="label label-danger">VENCIDO</span> {/if}</td>                                  
+                                </tr>                              
+                                <tr>
+                                  <th>E-mail do Beneficiado:</th>
+                                  <th>{$cupom.email_cupom}</th> 
+                                </tr>                                                          
+                                <tr>                 
+                                  <td>Celular do Beneficiado:</td>
+                                  <td>{$cupom.cel_Cupom}</td>                                  
+                                </tr> 
+                                <tr>
+                                  <th>Quatidade de Cupons Disponíveis</th>
+                                  <th>{$cupom.qtde_Cupom}</th> 
+                                </tr>                                                          
+                                <tr>                 
+                                  <td>Tempo do Benefício (dias):</td>
+                                  <td>{$cupom.dias_desc_Cupom}</td>                                  
+                                </tr>
+                           
+                                <tr>
+                                  <th>% de Desconto:</th>
+                                  <th>{$cupom.desconto_Cupom}</th> 
+                                </tr>                                                          
+                                <tr>                 
+                                  <td>Justificativa:</td>
+                                  <td>{$cupom.justify_Cupom}</td>                                  
+                                </tr>  
+                                <tr>                 
+                                  <td>Criado por:</td>
+                                  <td>{$adm.nome_User}</td>                                  
+                                </tr>
+                                <tr>                 
+                                  <td>Já Utilizado?</td>
+                                  <td>{if="$cupom.used_Cupom == 0"} <span class="label label-danger">Ainda não utilizado</span> {else} <span class="label label-success">Utilizado</span> {/if}</td>                                  
+                                </tr>  
+                                                         
+                              </tbody>
+                            </table>
+
+                    </div>                     
+                  </div>                
+                  <!-- /.box-body --> 
+              
+            <div class="box-footer">
+              <button type="button" class="btn btn-danger">Excluir Cupom</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

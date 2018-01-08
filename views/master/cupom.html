@@ -25,29 +25,34 @@
                   <tr>
                     <th width="130px" style=" text-align: center;">Cupom</th>
                     <th width="100px" style=" text-align: center;">Tipo</th>
+                    <th width="80px" style=" text-align: center;">Categoria</th>
                     <th width="40px"  style=" text-align: center;">Desconto</th>
-                    <th width="115px" style=" text-align: center;">Período</th>
-                    <th width="200px" style=" text-align: center;">E-mail</th>
-                    <th width="110px" style=" text-align: center;">Usuário</th>
-                    <th width="110px" style=" text-align: center;">Utilizado</th>
-                    <th style="width: 150px; text-align: center;">Admin</th>
+                    <th width="115px" style=" text-align: center;">Tempo de Benefício</th>
+                    <th width="150px" style=" text-align: center;">E-mail</th>
+                    <th width="110px" style=" text-align: center;">Gerado por</th>
+                    <th width="90px" style=" text-align: center;">Utilizado</th>
+                    <th style="width: 120px; text-align: center;">Validade</th>
+                    <th style="width: 200px; text-align: center;">Admin</th>
                     
                   </tr>
                 </thead>
                 <tbody>
-                  {loop="$users"}
+                  {loop="$cupons"}
                   <tr>                 
-                    <td>{$value.nome_User}</td>
-                    <td>{$value.email_User}</td>
-                    <td>{$value.tipo_conta}</td/>
-                    <td>{$value.cel_User}</td/>
-                    <td>{$value.data_Inicio_Conta}</td/>
-                    <td>{$value.validade_Conta}</td/>
+                    <td>{$value.cod_Cupom}</td>
+                    <td>{$value.tipo_Cupom}</td>
+                    <td>{$value.categoria_Cupom}</td>
+                    <td>{if="$value.desconto_Cupom == ''"} --- {else}{$value.desconto_Cupom}{/if}</td/>
+                    <td>{$value.dias_desc_Cupom}</td/>
+                    <td>{$value.email_cupom}</td/>
+                    <td>{$adm.nome_User}</td/>
+                    <td>{if="$value.used_Cupom == 1"}Sim{else}Não{/if}</td/>
+                    <td>{$value.validade_Cupom}</td/>
                     
                     <td style=" text-align: center;">
-                      <a href="/master/users/{$value.id_User}" class="btn btn-success btn-xs"><i class="fa fa-search"></i> DETALHES</a>
-                      <a href="/master/users/{$value.id_User}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> EXCLUIR</a>
-                      <a href="/master/users/{$value.id_User}/del" onclick="return confirm('Deseja realmente excluir este cupom?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
+                      <a href="/master/cupom/{$value.id_Cupom}" class="btn btn-success btn-xs"><i class="fa fa-search"></i> DETALHES</a>
+                      <a href="/master/cupom/{$value.id_Cupom}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> EXCLUIR</a>
+                      <a href="/master/cupom/{$value.id_Cupom}/del" onclick="return confirm('Deseja realmente excluir este cupom?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                     </td>
                   </tr>
                   {/loop}

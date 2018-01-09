@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>SySTrader</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +51,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+                    <a href="/system" class="navbar-brand">                      
+                        <span class="img-logo">Sys Traders</span>
+                    </a>
             </div>
             <!-- /.navbar-header -->
 
@@ -144,7 +146,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Ajustes</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                        <li><a href="/system/logout"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -168,7 +170,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Painel</a>
+                            <a href="/system"><i class="fa fa-dashboard fa-fw"></i> Painel</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Trades<span class="fa arrow"></span></a>
@@ -189,19 +191,34 @@
                                     <a href="panels-wells.html">Meus Dados</a>
                                 </li>
                                 <li>
-                                    <a href="buttons.html">Conta</a>
-                                </li>
-                                <li>
-                                    <a href="buttons.html"><i class="fa fa-credit-card-alt fa-fw"></i> Pagamentos<span class="fa arrow"></span></a>
+                                    <a href="tables.html"> Conta<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-                                            <a href="flot.html">Meus Pagamentos</a>
-                                        </li>
+                                            <a href="buttons.html"><i class="fa fa-cog fa-fw"></i> Ajustes da Conta<span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <li>
+                                                    <a href="/system/conta-conf-broker">Corretora</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/system/conta-conf-params">Parâmetros da Conta</a>
+                                                </li>
+                                            </ul>
+                                        </li>   
                                         <li>
-                                            <a href="morris.html">Efeturar Pagamento</a>
-                                        </li>
+                                            <a href="buttons.html"><i class="fa fa-credit-card-alt fa-fw"></i> Pagamentos<span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <li>
+                                                    <a href="flot.html">Meus Pagamentos</a>
+                                                </li>
+                                                <li>
+                                                    <a href="morris.html">Efeturar Pagamento</a>
+                                                </li>
+                                            </ul>
+                                        </li>    
+
                                     </ul>
-                                </li>                                 
+                                </li>
+                                                              
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>                      

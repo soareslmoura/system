@@ -8,46 +8,108 @@ use \Traders\Model\Conta;
 
 class User extends Model{
 
-	const SESSION = "User";
+	const SESSION = "User";	
+	const SESSIONADM = "Adm";	
 
-	public static function login($login, $password){
+	public static function login($login, $password, $usertype)
+	{
 
 		$sql = new Sql();
 
-		$result = $sql->select("SELECT * FROM st_user WHERE email_User = :LOGIN", array(":LOGIN"=>$login));
+		if($usertype == 0)
+		{
+			$result = $sql->select("SELECT * FROM st_user WHERE email_User = :LOGIN", array(":LOGIN"=>$login));
+
+		}else if($usertype == 1){
+
+			$result = $sql->select("SELECT * FROM st_useradm WHERE email_useradm = :LOGIN", array(":LOGIN"=>$login));
+
+		}
+		
 		
 		if (!$result) {
 			throw new \Exception("Usuário inexistente ou senha inválida");// Contra-barra no exception pq o exception está fora do namespace Traders			
 		}
-
 		$data_user = $result[0];
 		
-		if(password_verify($password, $data_user["password_User"]))
+		if($usertype == 0)
 		{
 
-			$user = new User();
-			$user->setData($data_user);	
-		
-			$_SESSION[User::SESSION] = $user->getData();
+			if(password_verify($password, $data_user["password_User"]))
+			{
+				$user = new User();
+				$user->setData($data_user);	
+			
+				$_SESSION[User::SESSION] = $user->getData();
+				return $user;
+			}else{
+				throw new \Exception("Usuário inexistente ou senha inválida senha");
+			}
 
-			return $user;
+		}else if($usertype == 1){
 
-		}else{
+			if(password_verify($password, $data_user["password_useradm"]))
+			{
 
-			throw new \Exception("Usuário inexistente ou senha inválida senha");
+				$user = new User();
+				$user->setData($data_user);	
+			
+				$_SESSION[User::SESSIONADM] = $user->getData();
+				return $user;
+			}else{
+				throw new \Exception("Usuário inexistente ou senha inválida senha");
+			}
+			
+		}
+
+	}
+
+
+
+	private function verifyLevelUser($email)
+	{
+		$sql = new Sql();
+		return $sql->select("SELECT userLevel_id_User_Level FROM st_user WHERE email_User = :EMAIL", array(":EMAIL"=>$email));
+	}
+
+
+	public static function verifyLogin($inadmin = true)
+	{
+		if(
+			!isset($_SESSION[User::SESSIONADM]) 
+			||			
+			!(int)$_SESSION[User::SESSIONADM]["id_useradm"]>0 
+			|| 
+			(int)$_SESSION[User::SESSIONADM]["levelControl_useradm"] < 4 )
+		{
+			header("Location: /master/login");			
+			exit;
+
+		}
+
+
+	}
+
+	public static function verifyAdmLoged()
+	{
+		if($_SESSION[SESSION]!= null){
+
+			self::logout();
 		}
 	}
 
-	public static function verifyLogin($inadmin = true)
+	public static function verifyLoginUserComum($inadmin = true)
 	{
 		if(
 			!isset($_SESSION[User::SESSION]) 
 			||			
 			!(int)$_SESSION[User::SESSION]["id_User"]>0 
-			|| 
-			(int)$_SESSION[User::SESSION]["userLevel_id_User_Level"] < 4 )
+			||
+			(int)$_SESSION[User::SESSION]["userLevel_id_User_Level"]>3
+			)
 		{
-			header("Location: /master/login");			
+			self::logout();
+			header("Location: /");			
 			exit;
 
 		}
@@ -58,6 +120,12 @@ class User extends Model{
 	public static function logout()
 	{
 		$_SESSION[User::SESSION] = NULL;
+
+	}	
+
+	public static function logoutADM()
+	{
+		$_SESSION[User::SESSIONADM] = NULL;
 
 	}
 
@@ -128,7 +196,7 @@ class User extends Model{
 											  INNER JOIN st_tipoconta t ON c.tipoConta_id_tipo_Conta = t.id_tipo_Conta 
 									 		  INNER JOIN st_address a ON c.user_id_User = a.user_id_User WHERE u.id_User = :IDUSER ", array(":IDUSER"=>$iduser));
 
-		$this->setData($results[0]);
+		$this->setData($results);
 
 	}
 

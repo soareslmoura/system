@@ -6,6 +6,7 @@ require_once("vendor/autoload.php");
 use \Slim\Slim;
 use \Traders\Page;
 use \Traders\PageAdmin;
+use \Traders\PageSystem;
 use \Traders\Model\System;
 use \Traders\Model\User;
 use \Traders\DB\Sql;
@@ -31,13 +32,6 @@ $app->get('/master', function() {// LOGIN NO SITE ADMINSTRATIVO
 
 });
 
-$app->get('/system', function() {// PAGINA DO SISTEMA
-    
-	$page = new System();
-	$page->setTpl("index");
-
-});
-
 $app->get('/master/login', function() {
     
 	$page = new PageAdmin([
@@ -51,7 +45,7 @@ $app->get('/master/login', function() {
 
 $app->get('/master/logout', function() {
     
-	User::logout();
+	User::logoutAdm();
 	header("location:/master");
 	exit;
 
@@ -59,7 +53,8 @@ $app->get('/master/logout', function() {
 
 $app->post('/master/login', function() {
     
-	User::login($_POST['login'], $_POST['password']);
+    User::logout();
+	User::login($_POST['login'], $_POST['password'], 1);
 
 	header("location:/master");
 	exit;
@@ -272,6 +267,128 @@ $app->post('/master/cupom/create-multi', function() {// Página de castramento d
 
 });
 
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ROTAS SYSTEM ADM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+
+$app->get('/master/admin/admins/:id/:action/act', function($id, $operation) {
+
+	User::verifyLogin();
+
+	$adm = new System();
+	//$adm->getAdmin((int)$id);
+	$adm->operationAdmin($id, $operation);
+
+	header("location: /master/admin/admins");
+	exit;
+   
+});
+
+
+$app->get('/master/admin/admins', function() {// Página de cdastramento listagem dos Admins
+   
+    User::verifyLogin();
+
+    $admins = System::listAdmins();
+
+	$page = new PageAdmin();
+	$page->setTpl("admins", array(
+							"admins"=>$admins
+							));
+
+});
+
+$app->get('/master/admin/adm-create', function() {// Página de cadastramento de novo Admin
+   
+    User::verifyLogin();
+
+    $levels = System::listAdmLevels();
+
+    $senha = rand(000000,999999);
+	$options = [
+    'cost' => 10,
+	];
+	$hash = password_hash($senha, PASSWORD_BCRYPT, $options);
+
+	$sys = new System();
+	$sys->getAdmin((int)$_SESSION["User"]["id_useradm"]);	
+
+	$page = new PageAdmin();
+	$page->setTpl("adm-create", array(
+								"levels"=>$levels,
+								"hash"=>$hash,
+								"adm"=>$sys->getData()
+								));
+
+});
+
+
+$app->post('/master/admin/adm-create', function() {// Página de cdastramento de novo Admin
+
+	User::verifyLogin();
+   
+    $sys = new System();
+
+    $sys->setData($_POST);
+
+    $sys->createUserAdmin();
+
+    header("location: /master/admin/admins");
+	//var_dump($msg);
+	exit;
+
+});
+
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ROTAS SYSTEM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+$app->get('/system', function() {// PAGINA DO SISTEMA
+
+    User::verifyLoginUserComum();
+
+	$user = new User();
+	$user->getUser((int)$_SESSION["User"]["id_User"]);
+
+	$page = new PageSystem();
+	$page->setTpl("index");
+});
+
+$app->get('/system/conta-conf-params', function() {
+
+	//User::verifyLoginUserComum();
+
+	$page = new PageSystem();
+	$page->setTpl("conta-conf-params");
+
+});
+
+$app->get('/system/conta-conf-broker', function() {
+
+	//User::verifyLoginUserComum();
+
+	$page = new PageSystem();
+	$page->setTpl("conta-conf-broker");
+
+});
+
+$app->post('/', function() {// LOGIN DE USUARIO COMUM DO SISTEMA
+    
+    User::logout();
+	User::login($_POST['login'], $_POST['password'], 0);
+
+	header("location:/system");
+	exit;
+
+});
+
+$app->get('/system/logout', function() {
+    
+	User::logout();
+	
+	header("location:/");
+	exit;
+
+});
 
 
 

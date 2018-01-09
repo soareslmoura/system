@@ -1,0 +1,66 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Lista de Usuários
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active"><a href="/admin/users">Usuários</a></li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+  <div class="row">
+  	<div class="col-md-12">
+  		<div class="box box-primary">
+            
+            <div class="box-header">
+              <a href="/master/admin/adm-create" class="btn btn-success">Criar Administrador</a>
+            </div>
+            <div id="alert"></div>
+            <div class="box-body no-padding">
+              <table class="table table-striped ">
+                <thead>
+                  <tr>
+                    <th width="170px">Nome</th>
+                    <th width="100px">E-mail</th>
+                    <th width="40px">Level</th>
+                    <th width="115px">celular</th>
+                    <th width="110px">Data Cadastro</th>
+                    <th width="110px">Status</th>
+                    <th style="width: 250px; text-align: center;">Admin</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$admins"}
+                  <tr>                 
+                    <td>{$value.nome_useradm}</td>
+                    <td>{$value.email_useradm}</td>
+                    <td>{$value.desc_admLevel}</td/>
+                    <td>{$value.celular_useradm}</td/>
+                    <td>{$value.datacreate_useradm}</td/>
+                    <td>{$value.status_useradm}</td/>
+                    
+                    <td style=" text-align: center;">
+                      <a href="/master/admin/admins/{$value.id_useradm}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
+                      <a href="/master/admin/admins/{$value.id_useradm}/del/act" onclick="return confirm('Deseja realmente excluir este usuário?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+  	</div>
+  </div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

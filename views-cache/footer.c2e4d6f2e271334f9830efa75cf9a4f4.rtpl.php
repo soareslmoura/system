@@ -1,6 +1,4 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?></div>
-                <!-- /.col-lg-8 -->
-                <div class="col-lg-4">
+<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="col-lg-4"> <!-- PAINEIS LATERAIS DE CHAT E NOTIFICAÇÃO -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bell fa-fw"></i> Notifications Panel
@@ -60,7 +58,16 @@
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
-                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Donut Chart Example
+                        </div>
+                        <div class="panel-body">
+                            <div id="morris-donut-chart"></div>
+                            <a href="#" class="btn btn-default btn-block">View Details</a>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
                     <!-- /.panel -->
                     <div class="chat-panel panel panel-default">
                         <div class="panel-heading">
@@ -206,40 +213,80 @@
     <script src="/js/scripts.js"></script>
     <script src="/dist/js/sb-admin-2.js"></script>
 
+        <!-- inputMask 4 -->
+    <script src="/vendor/inputmask-4.x/js/inputmask.js"></script>
+    <script src="/vendor/maskmoney/dist/jquery.maskMoney.min.js"></script>
+
+
+
     <script>
-var ctx = document.getElementById("Chart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'line',    
-    data: {
-        labels: ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"],
-        datasets: [{
-            label: 'Total P/L',
-            data: [125, 132, 78, 18, 26, 140, 125, 139, 98, 56, 79, 174],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.0)',          
-               
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)'
-                
-            ],
-            borderWidth: 2,
-            tension: 0.06
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
 
+        $(function(){
+            $(".money").maskMoney({
+                     decimal: ".",
+                     thousands: ","
+                    });
+
+        });
+  
+
+        $(function(){
+
+            $('#share').hide();
+            $('#ticket').hide();
+              
+              $('#porshare').click(function(e) {
+                $('#share').show();
+                $('#ticket').hide();        
+              });
+              $('#porticket').click(function(e) {
+                $('#share').hide();
+                $('#ticket').show();        
+              });
+          });
+
+        $(function($){  
+           $("#user_cel").mask("(99) 99999-9999");
+           $("#user_cep").mask("99.999-999");
+      
+        });
+
+
+
+        
+        var ctx = document.getElementById("Chart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',    
+            data: {
+                labels: ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"],
+                datasets: [{
+                    label: 'Total P/L',
+                    data: [125, 132, 78, 18, 26, 140, 125, 139, 98, 56, 79, 174],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.0)',          
+                       
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)'
+                        
+                    ],
+                    borderWidth: 2,
+                    tension: 0.06
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+
+                        }
+                    }]
                 }
-            }]
-        }
 
-    }
+            }
     
-});
+        });
 </script>
 
 </body>

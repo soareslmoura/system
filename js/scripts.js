@@ -36,3 +36,68 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+
+
+ jQuery(function($){  
+   $("#user_cel").mask("(99) 99999-9999");
+   $("#user_cep").mask("99.999-999");
+  
+    });
+
+
+
+  $(function(){
+
+    $('#share').hide();
+    $('#ticket').hide();
+      
+      $('#porshare').click(function(e) {
+        $('#share').show();
+        $('#ticket').hide();        
+      });
+      $('#porticket').click(function(e) {
+        $('#share').hide();
+        $('#ticket').show();        
+      });
+  }); 
+
+  $(function(){
+
+    $('#divGindividual').hide();
+    $('#divDindividual').hide();
+      
+      $('#Dindividual').click(function(e) {
+        $('#divDindividual').show();
+        $('#divGindividual').hide();        
+      });
+      $('#Gindividual').click(function(e) {
+        $('#divDindividual').hide();
+        $('#divGindividual').show();        
+      });
+  });
+
+  $(function() {
+    $( "#validadegeral" ).datepicker({
+        dateFormat: 'dd/mm/yy',
+        showOtherMonths: true,
+        selectOtherMonths: false,
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
+    });
+});
+
+  $(function() {
+    $( "#validadeindividual" ).datepicker({
+        dateFormat: 'dd/mm/yy ',
+        showOtherMonths: true,
+        selectOtherMonths: false,
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
+    });
+}); 

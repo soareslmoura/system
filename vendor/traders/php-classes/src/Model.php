@@ -35,10 +35,11 @@ class Model{
 
 	public function setData($data = array())
 	{
-
 		foreach ($data as $key => $value) {
-			$this->{"set".$key}($value);
-		}
+
+			$this->{"set".$key}($value);		
+		
+	}
 
 
 
@@ -48,6 +49,14 @@ class Model{
 	{
 		return $this->values;
 	}
+
+	public function gerarHash($senha)
+	{
+		$options = [
+	    			'cost' => 10,
+					];
+		return $hash = password_hash($senha, PASSWORD_BCRYPT, $options);
+	}	
 
 }
 

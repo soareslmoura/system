@@ -274,6 +274,19 @@ desired effect
             <li><a href="/master/cupom">Cupom de Desconto</a></li>
           </ul>
         </li>
+        <li class="treeview">
+          <a href="#"><i class="fa fa-cog"></i> <span>Gerenciar Sistema</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/master/admin/admins">Cadastrar Administrador</a></li>
+            <li><a href="#">Cadastrar Corretora</a></li>
+            <li><a href="#">Cadastrar Período de Demo</a></li>
+            <li><a href="#">Cadastrar Período de Desconto</a></li>
+          </ul>
+        </li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

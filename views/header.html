@@ -104,21 +104,12 @@
 						<li><a href="#depoimentos">Depoimentos</a></li>
 						<li class="divisor" role="separator"></li>
 						<li><a href="#">Dúvidas?</a></li>
-						<li class="dropdown <?php 
-                                                if(($erro==1) || ($erro==2))
-                                                {
-                                                    echo 'open';        
-                                                }
-                                                
-                                                 
-                                   
-                                   
-                                                ?>">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Entrar <span class="caret"></span></a>
-							<form class="dropdown-menu form-entrar" method="post" action="validateLogin.php">
+							<form class="dropdown-menu form-entrar" method="post" action="/">
 								<h3 style="padding-left: 130px;">Login</h3>
 								<div style="padding-bottom: 50px;">
-									<input type="email" class="form-control col-sm-10" name="email" id="email" placeholder="e-mail" >
+									<input type="email" class="form-control col-sm-10" name="login" id="email" placeholder="e-mail" >
 								</div>
 								<div>
 									<input type="password" class="form-control" name="password" id="password" placeholder="senha">
@@ -135,9 +126,8 @@
 								<div style="padding-top: 5px;">
 									<button type="submit" class="btn btn-primary btn-block" id="btn-entrar">Entrar</button>
 								</div>
-								<br/>
-								
-                                <input type="hidden" name="page" value="1">
+								<br/>			
+                               
 							</form>
 
 						</li>

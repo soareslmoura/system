@@ -194,6 +194,63 @@ class System extends Model {
 		}
 	}
 
-}
+	public function createUserAdmin() {
+
+		$sql = new Sql();
+
+		$result = $sql->query("INSERT INTO st_useradm (nome_useradm, email_useradm, celular_useradm, levelControl_useradm, idAdm_useradm, password_useradm, verified, status_useradm, del_useradm) VALUES(:name, :email, :cel, :levelconta, :idadm, :password, :verified, :status, :del)", array(
+				":name"       => $this->getadm_name(),
+				":email"      => $this->getadm_email(),
+				":cel"        => $this->getadm_cel(),
+				":levelconta" => $this->getadm_nivel(),
+				":idadm"      => $this->getadm_idadm(),
+				":password"   => $this->gerarHash($this->getsenha()),
+				":verified"   => $this->getadm_verified(),
+				":status"     => 1,
+				":del"        => 0
+			));
+
+		//$this->setData($result);
+	}
+
+	public static function listAdmLevels() {
+		$sql = new Sql();
+
+		$admlevel = $sql->select("SELECT * FROM st_adminlevel ORDER BY level_admLevel");
+		return $admlevel;
+	}
+
+	public static function listAdmins() {
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM st_useradm u INNER JOIN st_adminlevel l ON u.levelControl_useradm = l.level_admLevel
+						     WHERE u.del_useradm <> 1 ORDER BY u.id_useradm");
+
+	}
+
+	public static function getAdmin($id) {
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM st_useradm WHERE id_useradm :ID", array(
+				":ID" => $id
+			));
+
+	}
+
+	public static function operationAdmin($id, $operation) {
+		$sql = new Sql();
+
+		if ($operation == "del") {
+			return $sql->query("UPDATE st_useradm SET del_useradm = 1 WHERE id_useradm = :ID", array(
+					"ID" => $id
+				));
+		}
+
+		return $sql->select("SELECT * FROM st_useradm u INNER JOIN st_adminlevel l ON u.levelControl_useradm = l.level_admLevel
+						     WHERE u.del_useradm <> 1 ORDER BY u.id_useradm");
+
+	}
+
+}/* #################  FIM DA CLASSE   #######################*/
 
 ?>

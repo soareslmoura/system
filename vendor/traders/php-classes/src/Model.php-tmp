@@ -48,6 +48,7 @@ class Model {
 		$options = [
 			'cost' => 10,
 		];
+
 		return $hash = password_hash($senha, PASSWORD_BCRYPT, $options);
 	}
 

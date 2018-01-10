@@ -62,7 +62,7 @@
     </form>
     
 
-    <a href="#">Esqueci minha senha</a><br>    
+    <a href="/master/forgot">Esqueci minha senha</a><br>    
 
   </div>
   <!-- /.login-box-body -->

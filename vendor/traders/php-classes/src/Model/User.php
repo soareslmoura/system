@@ -26,7 +26,6 @@ class User extends Model{
 
 		}
 		
-		
 		if (!$result) {
 			throw new \Exception("Usuário inexistente ou senha inválida");// Contra-barra no exception pq o exception está fora do namespace Traders			
 		}
@@ -56,6 +55,7 @@ class User extends Model{
 			
 				$_SESSION[User::SESSIONADM] = $user->getData();
 				return $user;
+
 			}else{
 				throw new \Exception("Usuário inexistente ou senha inválida senha");
 			}
@@ -79,8 +79,8 @@ class User extends Model{
 			!isset($_SESSION[User::SESSIONADM]) 
 			||			
 			!(int)$_SESSION[User::SESSIONADM]["id_useradm"]>0 
-			|| 
-			(int)$_SESSION[User::SESSIONADM]["levelControl_useradm"] < 4 )
+		)
+						
 		{
 			header("Location: /master/login");			
 			exit;

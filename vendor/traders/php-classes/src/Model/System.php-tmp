@@ -4,9 +4,12 @@ namespace Traders\Model;
 
 use \Datetime;
 use \Traders\DB\Sql;
+use \Traders\Mailer;
 use \Traders\Model;
 
 class System extends Model {
+
+	const SECRET = "22traders2018sys";
 
 	public function getUserCupom($email = null, $used, $tipo, $cat)// verifica se existe um cupom já gerado para o usuario
 	{
@@ -204,7 +207,7 @@ class System extends Model {
 				":cel"        => $this->getadm_cel(),
 				":levelconta" => $this->getadm_nivel(),
 				":idadm"      => $this->getadm_idadm(),
-				":password"   => $this->gerarHash($this->getsenha()),
+				":password"   => $this->gerarHash($this->getadm_hash()),
 				":verified"   => $this->getadm_verified(),
 				":status"     => 1,
 				":del"        => 0
@@ -248,6 +251,52 @@ class System extends Model {
 
 		return $sql->select("SELECT * FROM st_useradm u INNER JOIN st_adminlevel l ON u.levelControl_useradm = l.level_admLevel
 						     WHERE u.del_useradm <> 1 ORDER BY u.id_useradm");
+
+	}
+
+	public static function getForgotAdm($email) {
+
+		$sql = new Sql();
+
+		$result = $sql->select("SELECT email_useradm, id_useradm, nome_useradm FROM st_useradm WHERE email_useradm = :email", array(
+				":email" => $email
+			));
+
+		if (count($result) === 0) {
+			throw new \Exception('Não foi possível recuperar a senha');
+		} else {
+			$data = $result[0];
+
+			$result2 = $sql->select("CALL sp_admpasswordsrecoveries_create (:iduseradm, :ipadm, :tipouser)",
+				array(
+					":iduseradm" => $result['id_useradm'],
+					":ipadm"     => $_SERVER['REMOTE_ADDR'],
+					":tipouser"  => 2
+				));
+
+			if (count($result2) === 0) {
+				throw new \Exception('Não foi possível recuperar a senha');
+
+			} else {
+				$datarecovery = $result2[0];
+
+				$code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, System::SECRET, $datarecovery['id_useradm'], MCRYPT_MODE_ECB));
+
+				$link = "http:://http://www.systrader1.com.br/master/forgot/reset?code=$code";
+
+				$mailer = new Mailer($mail, $data['nome_useradm'], "Redefinir senha SySTrader ADM", "forgot",
+					array
+					("name" => $data['nome_useradm'],
+						"link" => $link
+					));
+
+				$mailer->send();
+
+				return $data;
+
+			}
+
+		}
 
 	}
 

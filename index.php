@@ -32,6 +32,15 @@ $app->get('/master', function() {// LOGIN NO SITE ADMINSTRATIVO
 
 });
 
+$app->get('/master/', function() {// LOGIN NO SITE ADMINSTRATIVO
+
+	User::verifyLogin();
+    
+	$page = new PageAdmin();
+	$page->setTpl("index");
+
+});
+
 $app->get('/master/login', function() {
     
 	$page = new PageAdmin([
@@ -184,7 +193,7 @@ $app->get('/master/cupom', function() {// Página lista de cupons criados
 	$cupons = System::listCupons();
 
 	$user = new User();
-	$user->getUser((int)$_SESSION["User"]["id_User"]);	
+	$user->getUser((int)$_SESSION["Adm"]["id_useradm"]);	
 	
 	$page = new PageAdmin();
 	$page->setTpl("cupom", array(			
@@ -220,7 +229,7 @@ $app->get('/master/cupom/:id', function($id) {// Página de detalhes do cupom cr
 	$sys->getCupom((int)$id);	
 
 	$user = new User();
-	$user->getUser((int)$_SESSION["User"]["id_User"]);
+	$user->getUser((int)$_SESSION["Adm"]["id_useradm"]);
 
 	date_default_timezone_set("UTC");
 	$date = date('Y-m-d H:i:s');
@@ -311,7 +320,7 @@ $app->get('/master/admin/adm-create', function() {// Página de cadastramento de
 	$hash = password_hash($senha, PASSWORD_BCRYPT, $options);
 
 	$sys = new System();
-	$sys->getAdmin((int)$_SESSION["User"]["id_useradm"]);	
+	$sys->getAdmin((int)$_SESSION["Adm"]["id_useradm"]);	
 
 	$page = new PageAdmin();
 	$page->setTpl("adm-create", array(
@@ -390,7 +399,74 @@ $app->get('/system/logout', function() {
 
 });
 
+/*##################################  RECUPERAÇÃO DE SENHA  #############################################*/
 
+$app->get('/master/forgot', function() {
+    
+	$page = new PageAdmin([
+		"header" => false,
+		"footer" => false
+	]);	
+
+	$page->setTpl("forgot");
+
+});
+
+$app->post('/master/forgot', function() {
+    
+	$user = System::getForgotAdm($_POST['email']);
+
+	header("location: /master/forgot/sent");
+	exit;
+});
+
+$app->get('/master/forgot/sent', function() {
+    
+	$page = new PageAdmin([
+		"header" => false,
+		"footer" => false
+	]);		
+
+	$page->setTpl("forgot/forgot-sent");
+
+});
+
+$app->get('/master/forgot/reset', function() {
+
+	$sys =System::validForgotDecrypt($_GET["code"]);
+    
+	$page = new PageAdmin([
+		"header" => false,
+		"footer" => false
+	]);	
+
+	$page->setTpl("forgot-reset", array(
+		"name"=>$sys["nome_useradm"],
+		"code"=>$_GET["code"]
+	));
+
+});
+
+$app->post('/master/forgot/reset', function() {
+
+	$sys = System::validForgotDecrypt($_POST["code"]);
+
+	System::setForgotUsed($sys['id_passrecovery']);
+
+	$adm = new System();
+
+	$dados = $adm->getAdmin((int)$sys['id_userrecovery']);
+
+	$adm->setPassword($_POST['password'], $dados->getid_useradm());
+
+	$page = new PageAdmin([
+		"header" => false,
+		"footer" => false
+	]);	
+
+	$page->setTpl("forgot-reset-success");
+
+});
 
 $app->run();
 

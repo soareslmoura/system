@@ -5,7 +5,6 @@ class Model{
 
 	private $values = [];
 
-
 	public function __call($name_method , $args)
 	/*
 	O metodo __call é chamado toda vez que chamamos um metodo que não existe na classe. 
@@ -16,9 +15,8 @@ class Model{
 	*/
 	{
 		$method = substr($name_method, 0, 3);
-
 		$fieldName = substr($name_method, 3, strlen($name_method));
-		
+
 		switch ($method)
 		{
 			case "get":
@@ -26,6 +24,7 @@ class Model{
 			break;
 
 			case "set":
+
 				$this->values[$fieldName] = $args[0];
 			break;		
 
@@ -35,13 +34,12 @@ class Model{
 
 	public function setData($data = array())
 	{
+	
 		foreach ($data as $key => $value) {
-
+			
 			$this->{"set".$key}($value);		
-		
-	}
-
-
+			
+		}
 
 	}
 
@@ -50,11 +48,13 @@ class Model{
 		return $this->values;
 	}
 
+
 	public function gerarHash($senha)
 	{
 		$options = [
 	    			'cost' => 10,
 					];
+					
 		return $hash = password_hash($senha, PASSWORD_BCRYPT, $options);
 	}	
 

@@ -8,8 +8,12 @@ use \Traders\Model\Conta;
 use \Traders\Model\User;
 use \Traders\Page;
 use \Datetime;
+use \Traders\Mailer;
 
 class System extends Model{
+
+
+	const SECRET = "22traders2018sys";
 
 
 	public function getUserCupom($email = null , $used, $tipo, $cat)// verifica se existe um cupom já gerado para o usuario
@@ -250,7 +254,7 @@ class System extends Model{
 																											":cel"=> $this->getadm_cel(),			
 																											":levelconta"=> $this->getadm_nivel(),
 																											":idadm"=> $this->getadm_idadm(),
-																											":password"=> $this->gerarHash($this->getsenha()),
+																											":password"=> $this->gerarHash($this->getadm_hash()),
 																											":verified"=> $this->getadm_verified(),
 																											":status"=> 1,
 																											":del"=> 0								
@@ -282,15 +286,25 @@ class System extends Model{
 	}
 
 
-		public static function getAdmin($id)
+	public static function getAdmin($id)
 	{
 		$sql = new Sql();
+		$adm = new System();
+		
 
-		return $sql->select("SELECT * FROM st_useradm WHERE id_useradm :ID", array(
+		$results = $sql->select("SELECT * FROM st_useradm WHERE id_useradm = :ID", array(
 																				":ID" =>$id			
 																				));
 
+		$adm->setData($results[0]);
+
+		return $adm;
+
+
+
 	}
+
+
 
 	public static function operationAdmin($id, $operation)
 	{
@@ -309,6 +323,113 @@ class System extends Model{
 	}
 
 
+	public static function getForgotAdm($email)
+	{
+
+		$sql = new Sql();
+
+		$result = $sql->select("SELECT email_useradm, id_useradm, nome_useradm FROM st_useradm WHERE email_useradm = :email", array(
+																										":email"=>$email
+																										));
+
+		if(count($result)===0)
+		{
+			throw new \Exception('Não foi possível recuperar a senha');
+		}else
+		{
+			$data = $result[0];
+
+			$result2 = $sql->select("CALL sp_admpasswordsrecoveries_create (:iduseradm, :ipadm, :tipouser)", 
+				array(
+					":iduseradm"=>$data['id_useradm'],
+					":ipadm"=>$_SERVER['REMOTE_ADDR'],
+					":tipouser"=>2
+			));
+
+			if(count($result2)===0)
+			{
+				throw new \Exception('Não foi possível recuperar a senha');
+			
+			}else
+			{
+				$datarecovery = $result2[0];
+
+				$code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, System::SECRET, $datarecovery['id_passrecovery'], MCRYPT_MODE_ECB));
+
+				$link = "http://www.systrader1.com.br/master/forgot/reset?code=$code";
+
+				$mailer = new Mailer($email, $data['nome_useradm'], "Redefinir senha SySTrader ADM", "forgot", 
+						array
+						("name"=>$data['nome_useradm'],
+						 "link"=>$link	
+						));
+
+				$mailer->sendMail();
+
+				return $data;
+
+			}
+
+		}
+
+
+	}
+
+
+	public static function validForgotDecrypt($code)
+	{
+
+		$id_passrecovery = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, System::SECRET, base64_decode($code), MCRYPT_MODE_ECB);
+
+		$sql = new Sql();
+
+		$result3 = $sql->select("
+					SELECT * 
+					FROM st_passrecovery p 
+					INNER JOIN st_useradm u 
+					ON p.id_userrecovery = u.id_useradm 
+					WHERE p.id_passrecovery = :idrecovery 
+					AND
+					p.dt_passrecovery is null
+					AND
+					DATE_ADD(p.dtrecovery_passrecovery, INTERVAL 1 Hour) >= Now();
+					", array(
+						":idrecovery"=>$id_passrecovery
+					));
+
+		if(count($result3)===0)
+		{
+			throw new \Exception('Não foi possível recuperar a senha');
+		}else
+		{
+
+			return $result3[0];
+		}
+
+	}
+
+
+	public static function setForgotUsed($idrecovery)
+	{
+		$sql = new Sql();
+
+		$sql->query("UPDATE st_passrecovery SET dt_passrecovery = now() WHERE id_passrecovery = :idrecovery" , array(":idrecovery"=>$idrecovery));
+
+	}
+
+
+	public function setPassword($password, $id)
+	{
+		$sql = new Sql();
+
+		$newhash = $this->gerarHash($password);
+
+		$sql->query("UPDATE st_useradm SET password_useradm = :hash WHERE id_useradm = :id", array(
+																								":hash"=>$newhash,
+																								":id"=>$id
+																								));
+
+	}
 
 }/* #################  FIM DA CLASSE   #######################*/
 

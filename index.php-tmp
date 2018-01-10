@@ -182,7 +182,7 @@ $app->get('/master/cupom', function () {// Página lista de cupons criados
 		$cupons = System::listCupons();
 
 		$user = new User();
-		$user->getUser((int) $_SESSION["User"]["id_User"]);
+		$user->getUser((int) $_SESSION["Adm"]["id_useradm"]);
 
 		$page = new PageAdmin();
 		$page->setTpl("cupom", array(
@@ -218,7 +218,7 @@ $app->get('/master/cupom/:id', function ($id) {// Página de detalhes do cupom c
 		$sys->getCupom((int) $id);
 
 		$user = new User();
-		$user->getUser((int) $_SESSION["User"]["id_User"]);
+		$user->getUser((int) $_SESSION["Adm"]["id_useradm"]);
 
 		date_default_timezone_set("UTC");
 		$date = date('Y-m-d H:i:s');
@@ -305,7 +305,7 @@ $app->get('/master/admin/adm-create', function () {// Página de cadastramento d
 		$hash = password_hash($senha, PASSWORD_BCRYPT, $options);
 
 		$sys = new System();
-		$sys->getAdmin((int) $_SESSION["User"]["id_useradm"]);
+		$sys->getAdmin((int) $_SESSION["Adm"]["id_useradm"]);
 
 		$page = new PageAdmin();
 		$page->setTpl("adm-create", array(
@@ -379,6 +379,35 @@ $app->get('/system/logout', function () {
 
 		header("location:/");
 		exit;
+
+	});
+
+/*##################################  RECUPERAÇÃO DE SENHA  #############################################*/
+
+$app->get('/master/forgot', function () {
+
+		$page = new PageAdmin([
+				"header" => false,
+				"footer" => false
+			]);
+
+		$page->setTpl("forgot");
+
+	});
+
+$app->post('/master/forgot', function () {
+
+		$user = System::getForgotAdm($_POST['email']);
+
+		header("location: /master/forgot/sent");
+		exit;
+	});
+
+$app->get('/master/forgot/sent', function () {
+
+		$page = new PageAdmin();
+
+		$page->setTpl("forgot/sent");
 
 	});
 

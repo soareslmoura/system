@@ -31,11 +31,7 @@
             <div class="form-group">
               <label for="adm_cel">Celular</label>
               <input type="tel" class="form-control" id="user_cel" name="adm_cel" placeholder="Digite o celular" required>
-            </div>
-            <div class="form-group">
-              <label for="adm_cel">senha</label>
-              <input type="tel" class="form-control" id="user_cel" name="senha" placeholder="senha" required>
-            </div>                
+            </div>                      
             <div class="form-group">
               <label for="adm_nivel">Nível de Controle</label>
                 <select class="form-control" id="adm_nivel" name="adm_nivel">                

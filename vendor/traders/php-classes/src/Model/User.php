@@ -98,14 +98,12 @@ class User extends Model{
 		}
 	}
 
-	public static function verifyLoginUserComum($inadmin = true)
+	public static function verifyLoginUserComum()
 	{
 		if(
 			!isset($_SESSION[User::SESSION]) 
 			||			
 			!(int)$_SESSION[User::SESSION]["id_User"]>0 
-			||
-			(int)$_SESSION[User::SESSION]["userLevel_id_User_Level"]>3
 			)
 		{
 			self::logout();
@@ -196,7 +194,7 @@ class User extends Model{
 											  INNER JOIN st_tipoconta t ON c.tipoConta_id_tipo_Conta = t.id_tipo_Conta 
 									 		  INNER JOIN st_address a ON c.user_id_User = a.user_id_User WHERE u.id_User = :IDUSER ", array(":IDUSER"=>$iduser));
 
-		$this->setData($results);
+		$this->setData($results[0]);
 
 	}
 

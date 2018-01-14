@@ -176,10 +176,10 @@
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Trades<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="flot.html">Lançar nova Trade</a>
+                                    <a href="/system/trade">Lançar nova Trade</a>
                                 </li>
                                 <li>
-                                    <a href="morris.html">Consultar Trades</a>
+                                    <a href="#">Consultar Trades</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -197,7 +197,7 @@
                                             <a href="buttons.html"><i class="fa fa-cog fa-fw"></i> Ajustes da Conta<span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level">
                                                 <li>
-                                                    <a href="/system/conta-conf-broker">Corretora</a>
+                                                    <a href="/system/conta-broker">Dados da Conta</a>
                                                 </li>
                                                 <li>
                                                     <a href="/system/conta-conf-params">Parâmetros da Conta</a>

@@ -14,6 +14,7 @@ class System extends Model{
 
 
 	const SECRET = "22traders2018sys";
+	const FOLDERUPLOAD = "/res/files/";
 
 
 	public function getUserCupom($email = null , $used, $tipo, $cat)// verifica se existe um cupom já gerado para o usuario
@@ -431,7 +432,244 @@ class System extends Model{
 
 	}
 
-}/* #################  FIM DA CLASSE   #######################*/
+	public function getSaldo($idconta)
+	{
+		$sql = new Sql();
+		$result = $sql->select("SELECT valor_saldo FROM st_saldoconta WHERE id_conta = :id", array(":id"=>$idconta));
+
+		if(count($result)===0)
+		{
+			return false;
+		}else
+		{
+			return $result[0];
+		}
+		
+		
+	}
+
+
+	public function makeDeposit($value, $account, $iduser)
+	{
+		$sql = new Sql();
+		$user = new User();
+
+	
+		if(!$this->getSaldo($account))
+		{
+
+			$saldo = 0.00;
+
+			$saldo = $this->numberWithoutPoints($saldo);
+
+			$valor = $this->numberWithoutPoints($value);
+
+			$total = $saldo + $valor;
+			$valor = $this->numberWithoutPoints($valor);                //number_format($valor,2,".",",");
+			$total = $this->numberWithoutPoints($total);                //number_format($total,2,".",",");
+			$saldo = $this->numberWithoutPoints($saldo);                 //number_format($saldo,2,".",",");
+
+			$user->getUser($iduser);
+			
+			$sql->select("CALL initial_deposit_account(:idconta, :iduser, :valordeposito, :saldo, :valortotal)", 
+				array(
+				":idconta"=> $user->getid_Conta(),
+				":iduser"=> $user->getid_User(),
+				":valordeposito"=> $valor,
+				":saldo"=> $saldo,
+				":valortotal"=> $total
+			));
+
+
+		}else
+		{
+		 //echo number_format($num,2,’,’,’.’);
+
+			$saldo = $this->getSaldo($account);
+			$saldo = $this->numberWithoutPoints($saldo['valor_saldo']);
+
+			$valor = $this->numberWithoutPoints($value);
+	
+			$total = $saldo + $valor;
+			$valor = $this->numberWithoutPoints($valor);                //number_format($valor,2,".",",");
+			$total = $this->numberWithoutPoints($total);                //number_format($total,2,".",",");
+			$saldo = $this->numberWithoutPoints($saldo);                 //number_format($saldo,2,".",",");
+
+			$user->getUser($iduser);
+
+
+			$sql->select("CALL update_deposit_account(:idconta, :iduser, :valordeposito, :saldo, :valortotal)", 
+				array(
+				":idconta"=> $user->getid_Conta(),
+				":iduser"=> $user->getid_User(),
+				":valordeposito"=> $valor,
+				":saldo"=> $saldo,
+				":valortotal"=> $total
+			));
+		}
+
+
+	}
+
+	public function makewithdraw($value, $account, $iduser)
+	{
+		$sql = new Sql();
+		$user = new User();
+
+		$saldo = $this->getSaldo($account);
+
+		
+		if($saldo>0)
+		{	
+			$valor = $this->numberWithoutPoints($value);
+			$saldo = $this->numberWithoutPoints($saldo['valor_saldo']);
+	
+			$total = $saldo - $valor;
+			$total = $this->numberWithoutPoints($total);
+
+			$user->getUser($iduser);
+
+			$sql->select("CALL withdraw_account(:idconta, :iduser, :valordeposito, :saldo, :valortotal)", 
+				array(
+				":idconta"=> $user->getid_Conta(),
+				":iduser"=> $user->getid_User(),
+				":valordeposito"=> $valor,
+				":saldo"=> $saldo,
+				":valortotal"=> $total
+			));
+
+		}
+
+	}
+
+	public function numberWithoutPoints($number)
+	{
+
+		$valor = str_replace("," , "" , $number); // Primeiro tira os pontos	
+
+		return $valor;
+	}
+
+	public function getParamsAccount($idconta)
+	{
+		$sql = new Sql();
+		$result = $sql->select("SELECT * FROM st_contaparam WHERE idconta_contaparam = :id", array(":id"=>$idconta));
+
+		if(count($result)===0)
+		{
+			return false;
+		}else
+		{
+			return $result[0];
+		}
+		
+		
+	}
+
+	public static function getBrokers()
+	{
+		$sql = new Sql();
+		
+		return $results = 	$sql->select("SELECT * FROM st_broker ORDER BY nome_corretora");	
+
+	}
+
+
+	public function getConfBroker($idconta)
+	{
+		$sql = new Sql();
+		
+		return $results = $sql->select("SELECT * FROM st_conta c 
+										INNER JOIN st_comissions cm ON c.id_Conta = cm.id_conta_comission 
+										INNER JOIN st_fees f ON c.id_Conta = f.id_conta_fees 
+										INNER JOIN st_tipocobranca t ON c.id_Conta = t.id_conta_cobranca 
+										INNER JOIN st_broker b ON cm.id_Broker = b.id_corretora 
+										WHERE c.id_Conta = :idconta", array(":idconta"=>$idconta));
+
+	
+	}
+
+
+	public function importFileTrade($file, $mode)
+	{
+
+		$destino = $_SERVER["DOCUMENT_ROOT"]."/res/files/";
+
+		$arquivo_tmp = $_FILES['arquivo']['name'];
+
+		$result = move_uploaded_file( $_FILES['arquivo']['tmp_name'], $destino.$_FILES["arquivo"]["name"]);
+
+		return $caminhoHtml = $_SERVER["DOCUMENT_ROOT"].'/res/files/'.$_FILES["arquivo"]["name"];
+
+	}
+
+	public function apaga_files($namefile,$path)
+	{
+		$dir = $_SERVER["DOCUMENT_ROOT"].$path;
+
+		if(is_dir($dir))
+		{
+			if($handle = opendir($dir))
+			{
+				while(($file = readdir($handle)) !== false)
+				{
+					if($file != '.' && $file != '..')
+					{
+						
+							unlink($dir.$file);
+						
+					}
+				}
+			}
+		}
+		else
+		{
+			die("Erro ao abrir dir: $dir");
+		}
+	        return 0;
+	}
+
+	
+
+	public function convert_csv_to_json($csv_data)
+	{
+		$file= $csv_data;
+		$csv= file_get_contents($file);
+		$array = array_map("str_getcsv", explode("\n", $csv));
+		$json = json_encode($array);
+
+	}
+
+	public function csvtojson($file,$delimiter)
+	{
+	    if (($handle = fopen($file, "r")) === false)
+	    {
+	            die("can't open the file.");
+	    }
+
+	    $csv_headers = fgetcsv($handle, 4000, $delimiter);
+	    $csv_json = array();
+
+	    while ($row = fgetcsv($handle, 4000, $delimiter))
+	    {
+	            $csv_json[] = array_combine($csv_headers, $row);
+	    }
+
+	    fclose($handle);
+	    return json_encode($csv_json);
+	}
+
+
+
+
+
+
+
+
+
+
+
+}            /* #################  FIM DA CLASSE   #######################*/
 
 
 

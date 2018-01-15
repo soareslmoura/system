@@ -129,72 +129,166 @@ class Trades extends Model{
 	    $sys->apaga_files($file,'/res/files/');
 
 	    $tickets = $sql->select("SELECT * FROM st_tickets WHERE numerolote_Trade = :lote", array(":lote"=>	
-2018011469902));
+2018011561357));
 		$totalstokslote = array_column($tickets,'stock_Trade');	
-		$stoksdolote = array_unique($totalstokslote);    
-	  	//var_dump($stoksdolote);
+		$stoksdolote = array_unique($totalstokslote); 
+		$trt = array_values($stoksdolote);   
+		//var_dump($trt[3]);
 	    for($i=0; $i < count($stoksdolote); $i++)
 	    {
 
-	    	
+
+	    	$stock = $trt[$i];
 	    	$result = $sql->select("SELECT * FROM st_tickets WHERE stock_Trade = :stock AND numerolote_Trade = :lote" , 
 	    		array(
 	    			":stock"=>$stock,
-	    			":lote"=>2018011469902
+	    			":lote"=>2018011561357
 	    		));	    		
-	    	
+	    	//var_dump($result);
 			$valor = [];	
 			$qtdshare = [];
 			$valor = [];
 			$totaltickets = count($result);
-	    	foreach ($result as $key => $value) 
+			$preco = 0;
+			$sumshare = 0;
+			$share = 0;
+			$parcial = 0;
+			
+		   	foreach ($result as $key => $value) 
 	    	{	    
-				
+				var_dump($key);
 	    		$pos[$key] = $value['possition_Trade'];
 	    		$qtdshare[$key] = $value['qtd_Shares'];
 	    		$valor[$key] = $value['price_ticket'];
 	    		$initprice = $valor[0];
 	    		$initshare = $qtdshare[0];
+	    		//$initpos = $value[0];
+				//var_dump($value);    		
+	    		$u = $key -1;
+	    		
 	    		if(($key != 0))
-	    		{   	
+	    		{   
+
+					switch ($pos[$key]) {
+	    			
+		    			case "B":
+							var_dump("Iniciou num Long");
+	    					$sumshare = $qtdshare[$u] + $qtdshare[$key];
+	    						if($valor[$key] >= $valor[$u])
+	    						{
+	    							$dif = $valor[$key] - $valor[$u];
+	    						}else
+	    						{
+	    							$dif = $valor[$u] - $valor[$key];
+	    						} 
+
+	    					$preco = $dif * $qtdshare[$key];
+
+	    					var_dump($sumshare, $preco);    				
+		    				
+		    				//$preço = $valor[$key];
+		    			break;
+
+		    			case "S":
+		    				var_dump("Saida de Long");		    				
+    						$sumshare = $qtdshare[$u] - $qtdshare[$key];
+    							if($valor[$key] >= $valor[$u])
+	    						{
+	    							$dif = $valor[$key] - $valor[$u];
+	    						}else
+	    						{
+	    							$dif = $valor[$u] - $valor[$key];
+	    						} 
+    						$preco = $dif * $qtdshare[$key];
+    						var_dump( $preco);
+		    				
+		    			break;
+
+		    			case "SS":
+		    				var_dump("Iniciou de Short");
+		    				$sumshare = $qtdshare[$u] + $qtdshare[$key];
+			    				if($valor[$key] >= $valor[$u])
+	    						{
+	    							$dif = $valor[$key] - $valor[$u];
+	    						}else
+	    						{
+	    							$dif = $valor[$u] - $valor[$key];
+	    						} 
+    						$preco = $dif * $qtdshare[$key];
+		    				var_dump($preco);
+		    			break;
+
+		    			case "BC":
+		    				var_dump("Saída de Short");
+		    				$sumshare = $qtdshare[$u] - $qtdshare[$key];
+		    					if($valor[$key] >= $valor[$u])
+	    						{
+	    							$dif = $valor[$key] - $valor[$u];
+	    						}else
+	    						{
+	    							$dif = $valor[$u] - $valor[$key];
+	    						} 
+    						$preco = $dif * $qtdshare[$key];
+		    				var_dump($preco);
+		    			break;
+	    
+	    			}
+
+	    			if($sumshare === 0){
+	    				var_dump("fechou a posição");
+	    			}
+
+	    			/*
+
+
 	    			$u = $key -1;
 	    			
 	    			if($pos[$u] == $pos[$key])
 	    			{	
-	    				$share = $qtdshare[$u] + $qtdshare[$key];
-	    				if($initprice>$valor[$u])
-	    				{
-	    					$preço = ((float)$initprice - $valor[$key]);
-	    				}else
-	    				{
-	    					$preço = ((float)$valor[$key] - $initprice);
-	    				}
+	    				$sumshare += $qtdshare[$key];
+
+		    				if($initprice>$valor[$u])
+		    				{
+		    					$preço = ((float)$initprice - $valor[$key]);
+		    					$parcial += $preço * $qtdshare[$key];
+		    					//var_dump($preço);
+
+		    				}else
+		    				{
+		    					$preço = ((float)$valor[$key] - $initprice);
+		    					$parcial += $preço * $qtdshare[$key];
+		    				}
 	    				//var_dump($share, $preço);
 	    			}else
 	    			{
-	    				$share = $initshare - $qtdshare[$key];
-
-	    				if($initprice>$valor[$key])
-	    				{
-	    					$preço = ((float)$initprice - $valor[$key]);
-	    				}else
-	    				{
-	    					$preço = ((float)$valor[$key] - $initprice);
-	    				}
-	    				//var_dump($share, $preço);
+	    				//var_dump($qtdshare[$key]);
+	    				$sumshare += $qtdshare[$key];	    				
+	    				
+		    				if($initprice>$valor[$key])
+		    				{
+		    					$preço = ((float)$initprice - $valor[$key]);
+		    					$parcial += $preço * $qtdshare[$key];
+		    					//var_dump($parcial);
+		    				}else
+		    				{
+		    					$preço = ((float)$valor[$key] - $initprice);
+		    					$parcial += $preço * $qtdshare[$key];
+		    				}
+	    				//var_dump($sumshare, $preço);
 	    			}
 
-	    			if($share === 0)
+    				var_dump($parcial);
+	    			if($initshare == $sumshare)
 	    			{
-	    				var_dump("finalmente resolvi");
-	    			}
+	    				var_dump("finalmente resolvi".$i);
+	    			}*/
 	    			
-	    			var_dump($initprice);// TEM QUE DIFERENCIAR TRADE SIMPLES DE TRADE COM PARCIAL
+	    			
 	    		}
 				
-
+	    		
 	    	}
-	    	
+	    	//var_dump($sumshare, $preço);
 	    }    	
 		exit;
 	}
@@ -237,7 +331,7 @@ class Trades extends Model{
 			$stock = array_column($trades, 'stock_Trade');		
 			
 			//var_dump($value);
-			var_dump(in_array($value,array("KODK")));
+			//var_dump(in_array($value,array("KODK")));
 			
 	
 

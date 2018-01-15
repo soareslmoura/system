@@ -442,21 +442,23 @@ $app->get('/system/trade', function () {// CONFIGURAÇAO DE CORRETORA E COMISSIO
 
 		$dadosconta = $conta->getConta($_SESSION[User::SESSION]["id_User"]);
 		$tickets = $trades->getTickes($dadosconta['id_Conta']);
+
 		if (count($tickets) > 0) {
-			$trades->calculateTrade($dadosconta['id_Conta']);
+			//$trades->calculateTrade($dadosconta['id_Conta']);
 
 			$page->setTpl("trade",
 				array(
 					"iduser" => $user->getid_User()
 				));
 
+		} else {
+			$page->setTpl("trade",
+				array(
+					"iduser" => $user->getid_User()
+
+				));
 		}
 
-		$page->setTpl("trade",
-			array(
-				"iduser" => $user->getid_User()
-
-			));
 	});
 
 $app->post('/system/trade', function () {// CONFIGURAÇAO DE CORRETORA E COMISSIONS

@@ -1,0 +1,258 @@
+<?php 
+
+use \Slim\Slim;
+use \Traders\Page;
+use \Traders\PageAdmin;
+use \Traders\PageSystem;
+use \Traders\Model\System;
+use \Traders\Model\User;
+use \Traders\Model\Trades;
+use \Traders\Model\Conta;
+use \Traders\DB\Sql;
+
+
+
+$app->get('/cdemo', function() {// Página de cdastramento conta demo pelo usuário
+    
+	$page = new Page();
+	$page->setTpl("cdemo");
+
+});
+
+$app->post('/cdemo', function() {// Cadastro de conta demo pelo usuário comum 	
+
+	$user = new User();
+
+	$user->setData($_POST);
+
+	$msg = $user->createUserExternal();
+	var_dump($msg);
+	//header("location: /cdemo");
+	exit;	    
+});
+
+
+
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ROTAS SYSTEM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+
+$app->get('/system', function() {// PAGINA DO SISTEMA
+
+    User::verifyLoginUserComum();
+    $sys = new System();
+	$user = new User();
+	$user->getUser((int)$_SESSION["User"]["id_User"]);
+	$sys->getMonthDays();
+	$page = new PageSystem();
+	$page->setTpl("index");
+});
+
+$app->get('/system/conta-conf-params', function() {
+
+	User::verifyLoginUserComum();
+	$user = new User();
+    $sys = new System();
+    $user->getUser($_SESSION['User']["id_User"]);
+
+    
+	$saldo = $sys->getSaldo($user->getid_Conta());
+	$params = $sys->getParamsAccount($user->getid_Conta());
+
+
+	$page = new PageSystem();
+	$page->setTpl("conta-conf-params", 
+		array(
+			"saldo"=>$saldo,
+			"params"=>$params
+		));
+
+});
+
+$app->get('/system/conta-broker', function() { // CONFIGURAÇAO DE CORRETORA E COMISSIONS
+
+	User::verifyLoginUserComum();
+
+	$user = new User();
+	$sys = new System();
+	$user->getUser($_SESSION['User']["id_User"]);
+
+	$conf = $sys->getConfBroker($user->getid_Conta());
+
+	$page = new PageSystem();
+	$page->setTpl("conta-broker", 
+		array(
+			"data"=>$conf[0],
+			"nome"=>$user->getnome_User()
+		));
+
+});
+
+$app->get('/system/conta-conf-broker', function() { // CONFIGURAÇAO DE CORRETORA E COMISSIONS
+
+	User::verifyLoginUserComum();
+
+	$sys = new System();
+	
+	$brokers = $sys->getBrokers();
+
+	$page = new PageSystem();
+	$page->setTpl("conta-conf-broker", 
+		array(
+			"broker"=>$brokers
+		));
+
+});
+
+$app->post('/', function() {// LOGIN DE USUARIO COMUM DO SISTEMA
+    
+    User::logout();
+	User::login($_POST['login'], $_POST['password'], 0);
+
+	header("location:/system");
+	exit;
+
+});
+
+$app->get('/system/logout', function() {
+    
+	User::logout();
+	
+	header("location:/");
+	exit;
+
+});
+
+
+
+
+
+
+
+
+
+
+
+/* ############################    TRADES  ###############################################*/
+
+$app->get('/system/trade', function() { // CONFIGURAÇAO DE CORRETORA E COMISSIONS
+	clearstatcache();
+	User::verifyLoginUserComum();
+	$user = new User();
+	$conta = new Conta();
+	$trade = new Trades();
+	$page = new PageSystem();
+	$user->getUser($_SESSION[User::SESSION]["id_User"]);
+
+	$dadosconta = $conta->getConta($_SESSION[User::SESSION]["id_User"]);
+	$tickets = $trade->getTickes($dadosconta['id_Conta']);
+	$trades = $trade->getTrade($dadosconta['id_Conta'],null);
+
+		if(count($trades)>0)
+		{
+	
+			$page->setTpl("trade", 
+				array(
+				"iduser"=>$user->getid_User(),
+				"trades"=>$trades
+			));
+
+		}else
+		{
+			$page->setTpl("trade", 
+				array(
+				"iduser"=>$user->getid_User()
+
+			));
+		}
+	
+	
+});
+
+$app->post('/system/trade', function(){ // CONFIGURAÇAO DE CORRETORA E COMISSIONS
+
+	User::verifyLoginUserComum();
+
+	$sys = new System();
+	$user = new User();
+	$trade = new Trades();
+	$conta = new Conta();
+
+	$user->getUser($_POST['iduser']);
+	$file = $sys->importFileTrade($_FILES, "r");
+	$result = $trade->createTicket($file,$user->getid_Conta());
+
+
+	$page = new PageSystem();
+	$user->getUser($_SESSION[User::SESSION]["id_User"]);
+
+	$dadosconta = $conta->getConta($_SESSION[User::SESSION]["id_User"]);
+	$tickets = $trade->getTickes($dadosconta['id_Conta']);
+	$trades = $trade->getTrade($dadosconta['id_Conta'],null);
+
+		if(count($trades)>0)
+		{
+	
+			$page->setTpl("trade", 
+				array(
+				"iduser"=>$user->getid_User(),
+				"trades"=>$trades
+			));
+
+		}else
+		{
+			$page->setTpl("trade", 
+				array(
+				"iduser"=>$user->getid_User()
+
+			));
+		}
+
+});
+
+
+/*#########################################################################################*/
+
+
+
+
+
+
+
+
+/*########################## DEPOSITO E RETIRADA #########################################*/
+
+//DEPOSITO
+$app->post('/system/conta-conf-params/deposit', function() {
+    
+    $user = new User();
+    $sys = new System();
+
+	$user->getUser($_SESSION['User']["id_User"]);
+
+	$sys->makeDeposit($_POST['valor'], $user->getid_Conta(), $user->getid_User());
+	
+	header("location: /system/conta-conf-params");
+	exit;
+});
+
+//RETIRADA
+$app->post('/system/conta-conf-params/withdraw', function() {
+    
+    $user = new User();
+    $sys = new System();
+
+	$user->getUser($_SESSION['User']["id_User"]);
+
+	$sys->makewithdraw($_POST['valor'], $user->getid_Conta(), $user->getid_User());
+	
+	header("location: /system/conta-conf-params");
+	exit;
+});
+
+/*##################################  RECUPERAÇÃO DE SENHA  #############################################*/
+
+
+
+
+
+ ?>

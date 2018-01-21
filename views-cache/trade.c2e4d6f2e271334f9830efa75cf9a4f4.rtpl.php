@@ -48,23 +48,39 @@
                                                 </tr>
                                               </thead>
                                               <tbody>
+                                                <?php $totalpl = 0; ?>
+                                                <?php $counter1=-1;  if( isset($trades) && ( is_array($trades) || $trades instanceof Traversable ) && sizeof($trades) ) foreach( $trades as $key1 => $value1 ){ $counter1++; ?>
                                                 
                                                 <tr>                 
-                                                  <td>12/11/2017 9:37:53</td>
-                                                  <td>TSLA</td>
-                                                  <td>100</td/>
-                                                   <td>Short</td/>
-                                                  <td>335.98</td/>
-                                                  <td>334.48</td/>
-                                                  <td>150.00</td/>
-                                                  
+                                                  <td><?php echo htmlspecialchars( $value1["data_trade"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                  <td><?php echo htmlspecialchars( $value1["stock"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                  <td><?php echo htmlspecialchars( $value1["qtd_shares"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td/>
+                                                  <td><?php echo htmlspecialchars( $value1["posicao"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td/>
+                                                  <td><?php echo htmlspecialchars( $value1["valor"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td/>
+                                                  <td>X</td/>
+                                                  <td><?php echo htmlspecialchars( $value1["PLtrade"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td/>
+                                                  <?php $totalpl = $totalpl + $value1["PLtrade"]; ?>                                                  
                                                   <td style=" text-align: center;">
                                                     <a href="/master/users/#" class="btn btn-success btn-xs"><i class="fa fa-search"></i> DETALHES</a>
                                                     <a href="/master/users/#" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
                                                     <a href="/master/users/#/del" onclick="return confirm('Deseja realmente excluir este usuário?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                                                   </td>
                                                 </tr>
+                                                {function="getTradeDate($value.id_conta,$value.dateOperationSimple)" }
                                                 
+                                                  <tr>                 
+                                                  <td>TOTAL</td>
+                                                  <td></td>
+                                                  <td></td/>
+                                                  <td></td/>
+                                                  <td></td/>
+                                                  <td></td/>
+                                                  <td></td/>
+                                                  <td></td/>
+                                                </tr> 
+                                                <?php $totalpl = 0; ?> 
+                                               
+                                                <?php } ?>                                           
                                               </tbody>
                                             </table>
                                           </div>

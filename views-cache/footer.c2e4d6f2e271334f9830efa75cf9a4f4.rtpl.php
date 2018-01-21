@@ -1,34 +1,38 @@
 <?php if(!class_exists('Rain\Tpl')){exit;}?>                <div class="col-lg-4"> <!-- PAINEIS LATERAIS DE CHAT E NOTIFICAÇÃO -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> Notificações
+                            <i class="fa fa-bell fa-fw"></i> Calculadora de Shares
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> Novo Comentário
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i> 3 Novos Seguidores
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> Mensagens
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i> Nova Tarefa
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                                </a>                                
-                            </div>
-                            <!-- /.list-group -->
-                            <a href="#" class="btn btn-default btn-block">Ver Todos os Alertas</a>
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                <label for="stop" class="col-sm-2 control-label">Entrada</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control money" id="entrada" placeholder="Entrada">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label for="stop" class="col-sm-2 control-label">Stop</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control money" id="stoplimit" placeholder="Stop">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Risco</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control money" id="maxrisco" placeholder="Risco">
+                                </div>
+                              </div>                          
+                            </form>
+                            <div id="objetivo"></div>
+                            <div id="qtdshares"></div>
+                            <div id="parcial1"></div>
+                            <div id="parcial2"></div>
+                            <div id="parcial3"></div>
+                            <!-- /.list-group -->                          
+                            
+                            <button href="#" class="btn btn-success btn-block" id="calcshares">Calcular Shares </button>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -194,6 +198,61 @@
                     });
 
         });
+
+
+        $(function(){
+
+            $("#objetivo").hide();
+            $("#qtdshares").hide();
+            $("#parcial1").hide();
+            $("#parcial2").hide();
+            $("#parcial3").hide();
+
+            $("#calcshares").click(function(){
+                var dif = 0;
+                var risco = parseFloat($("#maxrisco").val());
+                var stop = parseFloat($("#stoplimit").val()); 
+                var entrada = parseFloat($("#entrada").val());
+                var shares = 0;
+                var parcial1 = 0;
+                var parcial2 = 0;
+                var parcial3 = 0; 
+               
+                if(entrada > stop)
+                {
+                    dif = parseFloat(entrada) - parseFloat(stop);
+                    target = entrada + dif;
+                } else
+                {
+                    dif = parseFloat(stop) - parseFloat(entrada);
+                    target = entrada - dif;
+                }            
+                
+                shares = Math.ceil(risco/dif);
+                parcial1 = Math.ceil(shares*0.7);
+                parcial2 = Math.ceil(parcial1*0.7);
+               parcial3 = Math.ceil(parcial2*0.7);
+
+                if(shares != 0)
+                {
+                  $("#objetivo").show();  
+                  $("#qtdshares").show();  
+                  $("#parcial1").show();  
+                  $("#parcial2").show();  
+                  $("#parcial3").show(); 
+
+                  $("#objetivo").html("Seu Objetivo é: "+target);
+                  $("#qtdshares").html("Qtde de Shares é: "+shares);
+                  $("#parcial1").html("Parcial 1: "+parcial1);
+                  $("#parcial2").html("Parcial 2: "+parcial2);
+                  $("#parcial3").html("Parcial 3: "+parcial3);
+                }
+
+            }); 
+          
+        });
+
+         
   
 
         $(function(){

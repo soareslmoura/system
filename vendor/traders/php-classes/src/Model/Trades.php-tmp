@@ -120,19 +120,21 @@ class Trades extends Model {
 		$sys = new System();
 		$sys->apaga_files($file, '/res/files/');
 
-		$tickets = $sql->select("SELECT * FROM st_tickets WHERE numerolote_Trade = :lote", array(":lote" =>
-				2018011561357));
+		$tickets = $sql->select("SELECT * FROM st_tickets WHERE numerolote_Trade = :lote ORDER BY ticket_Trade", array(":lote" =>
+
+				$lote));
 		$totalstokslote = array_column($tickets, 'stock_Trade');
 		$stoksdolote    = array_unique($totalstokslote);
 		$trt            = array_values($stoksdolote);
-		//var_dump($trt[3]);
+		$trd            = array_keys($stoksdolote);
+		$dadosconta     = $sys->getParamsAccount($idconta);
 		for ($i = 0; $i < count($stoksdolote); $i++) {
 
 			$stock  = $trt[$i];
-			$result = $sql->select("SELECT * FROM st_tickets WHERE stock_Trade = :stock AND numerolote_Trade = :lote",
+			$result = $sql->select("SELECT * FROM st_tickets WHERE stock_Trade = :stock AND numerolote_Trade = :lote ORDER BY ticket_Trade",
 				array(
 					":stock" => $stock,
-					":lote"  => 2018011561357
+					":lote"  => $lote
 				));
 			//var_dump($result);
 			$valor        = [];
@@ -141,134 +143,295 @@ class Trades extends Model {
 			$totaltickets = count($result);
 			$preco        = 0;
 			$sumshare     = 0;
+			$totalshare   = 0;
 			$share        = 0;
 			$parcial      = 0;
+			$idtickets    = [];
+			$datatrade    = 0;
+			$ticketstrade = [];
 
+			//var_dump($result);
 			foreach ($result as $key => $value) {
-				var_dump($key);
-				$pos[$key]      = $value['possition_Trade'];
-				$qtdshare[$key] = $value['qtd_Shares'];
-				$valor[$key]    = $value['price_ticket'];
-				$initprice      = $valor[0];
-				$initshare      = $qtdshare[0];
+
+				$pos[$key]          = $value['possition_Trade'];
+				$qtdshare[$key]     = $value['qtd_Shares'];
+				$valor[$key]        = $value['price_ticket'];
+				$ticketstrade[$key] = $value['ticket_Trade'];
+				$date               = $value['dateTrade'];
+				//var_dump($ticketstrade);
+				if ($key == 0) {
+					$initprice  = $valor[0];
+					$initshare  = $qtdshare[0];
+					$sumshare   = $qtdshare[0];
+					$totalshare = $qtdshare[0];
+
+				}
+				$tickettrade = $ticketstrade[$key];
+				//$sumshare = $qtdshare[0];
 				//$initpos = $value[0];
 				//var_dump($value);
 				$u = $key-1;
 
-				if (($key != 0)) {
+				if (($key > 0)) {
 
 					switch ($pos[$key]) {
 
 						case "B":
-							var_dump("Iniciou num Long");
-							$sumshare = $qtdshare[$u]+$qtdshare[$key];
-							if ($valor[$key] >= $valor[$u]) {
-								$dif = $valor[$key]-$valor[$u];
+
+							if ($pos[$u] == "B") {
+								$anteriorprice = $initprice;
+								$initprice     = ($valor[$key]+$valor[$u])/2;
+								$sumshare      = $qtdshare[$key]+$qtdshare[$u];
+								$totalshare    = $qtdshare[$key]+$qtdshare[$u];
+
 							} else {
-								$dif = $valor[$u]-$valor[$key];
+								$initprice = $valor[$key];
+								$initshare = $qtdshare[$key];
+								$sumshare  = $sumshare+$qtdshare[$key];
+
+								if ($pos[$u] == "SS") {
+									$totalshare = $qtdshare[$key]+$qtdshare[$u];
+								} else {
+									$totalshare = $qtdshare[$key];
+								}
+
 							}
 
-							$preco = $dif*$qtdshare[$key];
-
-							var_dump($sumshare, $preco);
-
-							//$preço = $valor[$key];
 							break;
 
 						case "S":
-							var_dump("Saida de Long");
-							$sumshare = $qtdshare[$u]-$qtdshare[$key];
-							if ($valor[$key] >= $valor[$u]) {
-								$dif = $valor[$key]-$valor[$u];
+							//	var_dump("Saida de Long");
+							if ($pos[$u] == "S") {
+								$sumshare   = $sumshare-$qtdshare[$key];
+								$totalshare = $qtdshare[$key]+$qtdshare[$u];
+
+								//var_dump($sumshare);
 							} else {
-								$dif = $valor[$u]-$valor[$key];
+								$sumshare   = $sumshare-$qtdshare[$key];
+								$totalshare = $qtdshare[$key]+$qtdshare[$u];
+
 							}
-							$preco = $dif*$qtdshare[$key];
-							var_dump($preco);
+
+							if ($sumshare > 0) {
+								$sumshare   = $sumshare-$qtdshare[$key];
+								$totalshare = $qtdshare[$key]+$qtdshare[$u];
+							} else {
+								$sumshare = 0;
+							}
+
+							//var_dump("QTDE SHARE é ".$sumshare);
+
+							if ($valor[$key] > $initprice) {
+								//var_dump("GANHEI ".$value['stock_Trade']);
+								$dif = $valor[$key]-$initprice;
+							} else {
+								//var_dump("PERDI ".$value['stock_Trade']);
+								$dif = ($initprice-$valor[$key]);
+								//var_dump($initprice." - ".$valor[$key]);
+								$dif -= $dif*2;
+							}
+
+							$preco = $preco+($dif*$qtdshare[$key]);
+
+							if (($sumshare == 0)) {
+
+								//var_dump('Trade Concluída '.$value['stock_Trade']." Preço: ".$preco." TOTAL DE SHARES: ".$totalshare);
+								//var_dump($ticketstrade);
+								if ($dadosconta['type_comission'] == "S") {
+									if (($key < 2) && ($totalshare < 301)) {
+										$totalcomission = 3.00;
+									} else if (($key < 2) && ($totalshare > 300)) {
+										$totalcomission = $totalshare*$dadosconta['value_comission'];
+									} else if (($key > 1) && ($totalshare < 300)) {
+										$totalcomission = 3.00;
+									} else {
+										$totalcomission = $totalshare*$dadosconta['value_comission'];
+									}
+
+								} else {
+									$totalcomission = $key*6.95;
+								}
+								//var_dump($totalcomission);
+								$dateOperation = str_replace("/", "-", $value['dateTrade']);
+								$keyconclusion = $key;
+								$confirm       = $sql->select("CALL save_trades(:idconta, :posicao, :valor, :qtdshares, :datatrade, :stock, :numlote, :idticketinicial, :pl, :comission)",
+									array(
+										":idconta"         => $idconta,
+										":posicao"         => "Long",
+										":valor"           => $initprice,
+										":qtdshares"       => $totalshare,
+										":datatrade"       => $dateOperation,
+										":stock"           => $value['stock_Trade'],
+										":numlote"         => $lote,
+										":idticketinicial" => $value['ticket_Trade'],
+										":pl"              => $preco,
+										":comission"       => $totalcomission
+									));
+
+								if ($confirm != null) {
+
+									$idtrade = $confirm[0]["LAST_INSERT_ID()"];
+
+									foreach ($ticketstrade as $key => $value) {
+										//var_dump($idconta,$value,$idtrade);
+										//exit;
+
+										$sql->select("CALL save_id_trade_ticket(:idconta, :idtiket, :idtrade)",
+											array(
+												":idconta" => $idconta,
+												":idtiket" => $value,
+												":idtrade" => $idtrade
+											));
+									}
+								}
+								//var_dump($confirm);
+
+								$sumshare   = 0;
+								$initprice  = 0;
+								$dif        = 0;
+								$totalshare = 0;
+								$preco      = 0;
+
+							}
 
 							break;
 
 						case "SS":
-							var_dump("Iniciou de Short");
-							$sumshare = $qtdshare[$u]+$qtdshare[$key];
-							if ($valor[$key] >= $valor[$u]) {
-								$dif = $valor[$key]-$valor[$u];
+							//var_dump("Entrou num Short". $key);
+
+							if ($pos[$u] == "SS") {
+								$anteriorprice = $initprice;
+								$initprice     = ($valor[$key]+$valor[$u])/2;
+								$sumshare      = $qtdshare[$key]+$qtdshare[$u];
+								$totalshare    = $totalshare+$qtdshare[$key];
+
 							} else {
-								$dif = $valor[$u]-$valor[$key];
+								$initprice = $valor[$key];
+								$initshare = $qtdshare[$key];
+								$sumshare  = $sumshare+$qtdshare[$key];
+
+								$totalshare = $totalshare+$qtdshare[$key];
+
 							}
-							$preco = $dif*$qtdshare[$key];
-							var_dump($preco);
+
+							//$sumshare = $initshare + $qtdshare[$key];
+							//var_dump($sumshare);
+							//$anteriorprice = $initprice;
+
 							break;
 
 						case "BC":
-							var_dump("Saída de Short");
-							$sumshare = $qtdshare[$u]-$qtdshare[$key];
-							if ($valor[$key] >= $valor[$u]) {
-								$dif = $valor[$key]-$valor[$u];
+
+							if ($pos[$u] == "BC") {
+								$sumshare   = $sumshare-$qtdshare[$key];
+								$totalshare = $totalshare+$qtdshare[$key];
+
+								//var_dump($sumshare);
 							} else {
-								$dif = $valor[$u]-$valor[$key];
+								$sumshare   = $sumshare-$qtdshare[$key];
+								$totalshare = $totalshare+$qtdshare[$key];
+
 							}
-							$preco = $dif*$qtdshare[$key];
-							var_dump($preco);
+
+							if ($valor[$key] > $initprice) {
+								//var_dump("PERDI ".$value['stock_Trade']);
+								$dif = $initprice-$valor[$key];
+
+							} else {
+								//var_dump("GANHEI ".$initprice, $valor[$key]);
+								$dif = $initprice-$valor[$key];
+							}
+
+							//$dif = $initprice - $valor[$key];
+
+							$preco = $preco+($dif*$qtdshare[$key]);
+							//var_dump("Diferença: ". $dif);
+							//var_dump("Preço: ".$preco );
+							if (($sumshare == 0)) {
+								//var_dump('Trade Concluída '.$value['stock_Trade']." Preço: ".$preco." TOTAL DE SHARES: ".$totalshare);
+
+								if ($dadosconta['type_comission'] == "S") {
+									if (($key < 2) && ($totalshare < 301)) {
+										$totalcomission = 3.00;
+									} else if (($key < 2) && ($totalshare > 300)) {
+										$totalcomission = $totalshare*$dadosconta['value_comission'];
+									} else if (($key > 1) && ($totalshare < 300)) {
+										$totalcomission = 3.00;
+									} else {
+										$totalcomission = $totalshare*$dadosconta['value_comission'];
+									}
+
+								} else {
+									$totalcomission = $key*6.95;
+								}
+								//var_dump($totalcomission);
+								$dateOperation       = str_replace("/", "-", $value['dateTrade']);
+								$dateOperationSimple = substr($value['dateTrade'], 0, 10);
+								$keyconclusion       = $key;
+								$confirm             = $sql->select("CALL save_trades(:idconta, :posicao, :valor, :qtdshares, :datatrade, :stock, :numlote, :idticketinicial, :pl, :comission, :dateOperationSimple)",
+									array(
+										":idconta"             => $idconta,
+										":posicao"             => "Short",
+										":valor"               => $initprice,
+										":qtdshares"           => $totalshare,
+										":datatrade"           => $dateOperation,
+										":stock"               => $value['stock_Trade'],
+										":numlote"             => $lote,
+										":idticketinicial"     => $value['ticket_Trade'],
+										":pl"                  => $preco,
+										":comission"           => $totalcomission,
+										":dateOperationSimple" => $dateOperationSimple
+									));
+
+								if ($confirm != null) {
+									$idtrade = $confirm[0]["LAST_INSERT_ID()"];
+									foreach ($ticketstrade as $key => $value) {
+										//var_dump($idconta,$value,$idtrade);
+										//exit;
+										$sql->select("CALL save_id_trade_ticket(:idconta, :idtiket, :idtrade)",
+											array(
+												":idconta" => $idconta,
+												":idtiket" => $value,
+												":idtrade" => $idtrade
+											));
+									}
+								}
+								//var_dump($confirm);
+
+								$sumshare   = 0;
+								$initprice  = 0;
+								$totalshare = 0;
+								$dif        = 0;
+								$preco      = 0;
+
+							}
+
 							break;
 
-					}
-
-					if ($sumshare === 0) {
-						var_dump("fechou a posição");
-					}
-
+							/*
+					if(($sumshare == 0))
+					{
+					var_dump('Trade Concluída '.$value['stock_Trade']);
+					$sumshare = 0;
 					/*
+					$sql->query("INSERT INTO st_trades (id_conta, posicao, valor, qtd_shares, data_trade, stock, numlote, id_ticketInicial, PLtrade, comission) VALUES (:idconta, :posicao, :valor, :qtdshares, :datatrade, :stock, :numlote, idticketinicial, :pl, :comission)",
+					array(
 
+					));
+					//var_dump('Trade Concluída '.$value['stock_Trade']);
+					}	*/
 
-				$u = $key -1;
-
-				if($pos[$u] == $pos[$key])
-				{
-				$sumshare += $qtdshare[$key];
-
-				if($initprice>$valor[$u])
-				{
-				$preço = ((float)$initprice - $valor[$key]);
-				$parcial += $preço * $qtdshare[$key];
-				//var_dump($preço);
-
-				}else
-				{
-				$preço = ((float)$valor[$key] - $initprice);
-				$parcial += $preço * $qtdshare[$key];
-				}
-				//var_dump($share, $preço);
-				}else
-				{
-				//var_dump($qtdshare[$key]);
-				$sumshare += $qtdshare[$key];
-
-				if($initprice>$valor[$key])
-				{
-				$preço = ((float)$initprice - $valor[$key]);
-				$parcial += $preço * $qtdshare[$key];
-				//var_dump($parcial);
-				}else
-				{
-				$preço = ((float)$valor[$key] - $initprice);
-				$parcial += $preço * $qtdshare[$key];
-				}
-				//var_dump($sumshare, $preço);
-				}
-
-				var_dump($parcial);
-				if($initshare == $sumshare)
-				{
-				var_dump("finalmente resolvi".$i);
-				}*/
+					}
 
 				}
 
 			}
+
+			//var_dump($datatrade);
+
 			//var_dump($sumshare, $preço);
 		}
-		exit;
+		//exit;
 	}
 
 	public function getTickes($idconta) {
@@ -279,6 +442,26 @@ class Trades extends Model {
 				":idconta" => $idconta
 			)
 		);
+
+	}
+
+	public function getTrade($idconta, $data = null) {
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM st_trades WHERE id_conta = :idconta ORDER BY data_trade",
+			array(
+				":idconta" => $idconta
+			));
+
+	}
+
+	public function getTradeDate($idconta, $data = null) {
+		$sql = new Sql();
+
+		return $sql->select("SELECT dateOperationSimple FROM st_trades WHERE id_conta = :idconta ORDER BY data_trade",
+			array(
+				":idconta" => $idconta
+			));
 
 	}
 
@@ -307,6 +490,55 @@ class Trades extends Model {
 
 		exit;
 
+	}
+
+	public function totalPlTradesDay($idconta, $date) {
+
+		$sql = new Sql();
+
+		$result = $sql->select("SELECT PLtrade FROM st_trades WHERE id_conta = :idconta AND ORDER BY data_trade DESC",
+			array(
+				":idconta" => $idconta
+			));
+
+		/*
+		$datastrades = array_column($result,'data_trade');
+		$dates = array();
+		 */
+		$pl = 0;
+		foreach ($datastrades as $key => $value) {
+
+			$pl += $value;
+		}
+		/*
+		$date = array_unique($dates);
+		$date = array_values($date);
+		$totalpl = array();
+		$pl = 0;
+		foreach ($date as $key1 => $datas)
+		{
+		$pl =0;
+		foreach ($result as $key => $value)
+		{
+
+		$datatrade = substr($value['data_trade'], 0, 10);
+
+		if($datatrade === $datas)
+		{
+		//var_dump($value['PLtrade']);
+		exit;
+
+		$pl += $value['PLtrade'];
+
+		}
+
+		$pl;
+
+		}
+
+		}
+		 */
+		return $pl;
 	}
 
 }

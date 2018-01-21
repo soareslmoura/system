@@ -470,7 +470,10 @@ class System extends Model {
 
 	public function getParamsAccount($idconta) {
 		$sql    = new Sql();
-		$result = $sql->select("SELECT * FROM st_contaparam WHERE idconta_contaparam = :id", array(":id" => $idconta));
+		$result = $sql->select("SELECT * FROM st_contaparam p
+								INNER JOIN st_comissions cm ON p.idconta_contaparam = cm.id_conta_comission
+								INNER JOIN st_conta c ON c.id_Conta = p.idconta_contaparam
+								WHERE p.idconta_contaparam = :id", array(":id" => $idconta));
 
 		if (count($result) === 0) {
 			return false;
@@ -491,7 +494,8 @@ class System extends Model {
 		$sql = new Sql();
 
 		return $results = $sql->select("SELECT * FROM st_conta c
-										INNER JOIN st_comissions cm ON c.id_Conta = cm.id_conta_comission
+										INNER JOIN st_comissions cm
+										ON c.id_Conta = cm.id_conta_comission
 										INNER JOIN st_fees f ON c.id_Conta = f.id_conta_fees
 										INNER JOIN st_tipocobranca t ON c.id_Conta = t.id_conta_cobranca
 										INNER JOIN st_broker b ON cm.id_Broker = b.id_corretora
@@ -509,6 +513,25 @@ class System extends Model {
 
 		return $caminhoHtml = $_SERVER["DOCUMENT_ROOT"].'/res/files/'.$_FILES["arquivo"]["name"];
 
+	}
+
+	public function apaga_files($namefile, $path) {
+		$dir = $_SERVER["DOCUMENT_ROOT"].$path;
+
+		if (is_dir($dir)) {
+			if ($handle = opendir($dir)) {
+				while (($file = readdir($handle)) !== false) {
+					if ($file != '.' && $file != '..') {
+
+						unlink($dir.$file);
+
+					}
+				}
+			}
+		} else {
+			die("Erro ao abrir dir: $dir");
+		}
+		return 0;
 	}
 
 	public function convert_csv_to_json($csv_data) {
@@ -533,6 +556,19 @@ class System extends Model {
 
 		fclose($handle);
 		return json_encode($csv_json);
+	}
+
+	public function getMonthDays() {
+		$qtdDias = date("t");
+		$i       = 0;
+		$dias    = array();
+		while ($i < $qtdDias) {
+
+			$dias[$i] = $i+1;
+
+			$i++;
+		}
+
 	}
 
 }/* #################  FIM DA CLASSE   #######################*/
